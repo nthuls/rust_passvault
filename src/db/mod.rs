@@ -119,8 +119,14 @@ pub trait DatabaseBackend: Send + Sync {
         value: &str,
     ) -> Result<(), DbError>;
     
-    // Add a method to get connection pool for password count
     async fn get_password_count(&self) -> Result<usize, DbError>;
+
+    async fn get_password_by_site_and_username(
+        &self,
+        site: &str,
+        username: &str
+    ) -> Result<Option<PasswordEntry>, DbError>;
+
 }
 
 // Enum to hold specific backend implementations
@@ -357,6 +363,17 @@ impl Database {
         match &self.backend {
             DatabaseType::Postgres(backend) => Some(backend),
             _ => None,
+        }
+    }
+
+    pub async fn get_password_by_site_and_username(
+        &self,
+        site: &str,
+        username: &str
+    ) -> Result<Option<PasswordEntry>, DbError> {
+        match &self.backend {
+            DatabaseType::Postgres(backend) => backend.get_password_by_site_and_username(site, username).await,
+            DatabaseType::Sqlite(backend) => backend.get_password_by_site_and_username(site, username).await,
         }
     }
 }

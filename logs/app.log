@@ -1,89 +1,34 @@
-[2025-06-19T17:10:31Z INFO  rust_passvault rust_passvault] 🔒 Starting SecureVault - Password Manager & Privacy Shield
-[2025-06-19T17:10:31Z DEBUG rust_passvault rust_passvault] Initializing application...
-[2025-06-19T17:10:31Z DEBUG rust_passvault rust_passvault] Attempting database connection...
-[2025-06-19T17:10:31Z INFO  rust_passvault::db::postgres rust_passvault::db::postgres] Initializing PostgreSQL database...
-[2025-06-19T17:10:31Z INFO  rust_passvault::db::postgres rust_passvault::db::postgres] Connected to PostgreSQL
-[2025-06-19T17:10:31Z INFO  sqlx_postgres::connection::stream sqlx::postgres::notice] relation "config" already exists, skipping
-[2025-06-19T17:10:31Z DEBUG sqlx_core::logger sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS config (\n  key TEXT PRIMARY KEY,\n  value TEXT NOT NULL,\n  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()\n);\n" rows_affected=0 rows_returned=0 elapsed=5.579629ms
-[2025-06-19T17:10:31Z INFO  sqlx_postgres::connection::stream sqlx::postgres::notice] relation "passwords" already exists, skipping
-[2025-06-19T17:10:31Z DEBUG sqlx_core::logger sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS passwords (\n  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),\n  site TEXT NOT NULL,\n  username TEXT NOT NULL,\n  password BYTEA NOT NULL,\n  notes TEXT,\n  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),\n  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()\n);\n" rows_affected=0 rows_returned=0 elapsed=8.581779ms
-[2025-06-19T17:10:31Z INFO  sqlx_postgres::connection::stream sqlx::postgres::notice] relation "categories" already exists, skipping
-[2025-06-19T17:10:31Z DEBUG sqlx_core::logger sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS categories (\n  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),\n  name TEXT NOT NULL UNIQUE\n);\n" rows_affected=0 rows_returned=0 elapsed=8.013079ms
-[2025-06-19T17:10:31Z INFO  sqlx_postgres::connection::stream sqlx::postgres::notice] relation "password_categories" already exists, skipping
-[2025-06-19T17:10:31Z DEBUG sqlx_core::logger sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS password_categories (\n  password_id UUID REFERENCES passwords(id) ON DELETE CASCADE,\n  category_id UUID REFERENCES categories(id) ON DELETE CASCADE,\n  PRIMARY KEY (password_id, category_id)\n);\n" rows_affected=0 rows_returned=0 elapsed=8.937843ms
-[2025-06-19T17:10:31Z INFO  sqlx_postgres::connection::stream sqlx::postgres::notice] relation "idx_passwords_site" already exists, skipping
-[2025-06-19T17:10:31Z DEBUG sqlx_core::logger sqlx::query] summary="CREATE INDEX IF NOT …" db.statement="\n\nCREATE INDEX IF NOT EXISTS idx_passwords_site ON passwords(site);\n" rows_affected=0 rows_returned=0 elapsed=7.41976ms
-[2025-06-19T17:10:31Z INFO  sqlx_postgres::connection::stream sqlx::postgres::notice] relation "idx_password_categories" already exists, skipping
-[2025-06-19T17:10:31Z DEBUG sqlx_core::logger sqlx::query] summary="CREATE INDEX IF NOT …" db.statement="\n\nCREATE INDEX IF NOT EXISTS idx_password_categories ON password_categories(password_id);\n" rows_affected=0 rows_returned=0 elapsed=9.199254ms
-[2025-06-19T17:10:31Z DEBUG sqlx_core::logger sqlx::query] summary="SELECT gen_random_uuid();" db.statement="" rows_affected=0 rows_returned=1 elapsed=8.19321ms
-[2025-06-19T17:10:31Z DEBUG rust_passvault rust_passvault] Database connection established successfully
-[2025-06-19T17:10:31Z DEBUG rust_passvault rust_passvault] Setting up signal handlers
-[2025-06-19T17:10:31Z DEBUG rust_passvault rust_passvault] Creating vault and service instances
-[2025-06-19T17:10:31Z DEBUG rust_passvault rust_passvault] API will run on port: 5000
-[2025-06-19T17:10:31Z DEBUG rust_passvault rust_passvault] Starting recovery cleanup task
-[2025-06-19T17:10:31Z DEBUG rust_passvault rust_passvault] Starting API server in background thread
-[2025-06-19T17:10:31Z DEBUG rust_passvault rust_passvault] Launching interactive CLI menu
-[2025-06-19T17:10:31Z DEBUG rust_passvault rust_passvault] Running scheduled cleanup of expired sessions
-[2025-06-19T17:10:31Z DEBUG rust_passvault rust_passvault] Created new tokio runtime for API server
-[2025-06-19T17:10:31Z DEBUG rust_passvault rust_passvault] API server starting...
-[2025-06-19T17:10:31Z INFO  rust_passvault::api rust_passvault::api] Starting RustVault API server on port 5000
-[2025-06-19T17:10:31Z INFO  actix_server::builder actix_server::builder] starting 16 workers
-[2025-06-19T17:10:31Z INFO  actix_server::server actix_server::server] Tokio runtime found; starting in existing Tokio runtime
-[2025-06-19T17:10:31Z INFO  actix_server::server actix_server::server] starting service: "actix-web-service-0.0.0.0:5000", workers: 16, listening on: 0.0.0.0:5000
-[2025-06-19T17:10:31Z DEBUG sqlx_core::logger sqlx::query] summary="SELECT value FROM config …" db.statement="\n\nSELECT\n  value\nFROM\n  config\nWHERE\n  key = $1\n" rows_affected=0 rows_returned=1 elapsed=7.894094ms
-[2025-06-19T17:10:56Z INFO  rust_passvault::api::handlers::auth rust_passvault::api::handlers::auth] User logged out successfully
-[2025-06-19T17:11:05Z DEBUG rust_passvault::api::middleware::auth rust_passvault::api::middleware::auth] 🔍 Found Bearer token in header
-[2025-06-19T17:11:05Z DEBUG rust_passvault::api::middleware::auth rust_passvault::api::middleware::auth] 🔑 Token extracted: eyJ0eXAiOi...
-[2025-06-19T17:11:05Z WARN  rust_passvault::api::middleware::auth rust_passvault::api::middleware::auth] ❌ Token validation failed: Invalid session
-[2025-06-19T17:11:16Z INFO  rust_passvault::api::handlers::auth rust_passvault::api::handlers::auth] Attempting to unlock vault
-[2025-06-19T17:11:16Z INFO  rust_passvault::api::handlers::auth rust_passvault::api::handlers::auth] Received unlock request with password length: 6
-[2025-06-19T17:11:16Z DEBUG sqlx_core::logger sqlx::query] summary="SELECT value FROM config …" db.statement="\n\nSELECT\n  value\nFROM\n  config\nWHERE\n  key = $1\n" rows_affected=0 rows_returned=1 elapsed=7.378995ms
-[2025-06-19T17:11:18Z DEBUG sqlx_core::logger sqlx::query] summary="SELECT value FROM config …" db.statement="\n\nSELECT\n  value\nFROM\n  config\nWHERE\n  key = $1\n" rows_affected=0 rows_returned=1 elapsed=3.962602ms
-[2025-06-19T17:11:18Z INFO  rust_passvault::api::handlers::auth rust_passvault::api::handlers::auth] Vault unlocked successfully, token length: 205
-[2025-06-19T17:11:48Z DEBUG rust_passvault::api::middleware::auth rust_passvault::api::middleware::auth] 🔍 Found Bearer token in header
-[2025-06-19T17:11:48Z DEBUG rust_passvault::api::middleware::auth rust_passvault::api::middleware::auth] 🔑 Token extracted: eyJ0eXAiOi...
-[2025-06-19T17:11:48Z DEBUG rust_passvault::api::middleware::auth rust_passvault::api::middleware::auth] ✅ Token validation successful for session: 6523bc2e-0b00-46b6-84f1-1de31ee76822
-[2025-06-19T17:11:48Z DEBUG rust_passvault::api::middleware::auth rust_passvault::api::middleware::auth] ✅ Master key retrieved successfully
-[2025-06-19T17:11:48Z DEBUG rust_passvault::api::handlers::export rust_passvault::api::handlers::export] 🔍 export_csv called with query params: Query(ExportRequest { include_passwords: Some(true), include_notes: Some(true), password: None })
-[2025-06-19T17:11:48Z DEBUG rust_passvault::api::utils rust_passvault::api::utils] 🔍 extract_token called, checking for token
-[2025-06-19T17:11:48Z DEBUG rust_passvault::api::utils rust_passvault::api::utils] ✅ Using token from request extensions, session_id: 6523bc2e-0b00-46b6-84f1-1de31ee76822
-[2025-06-19T17:11:48Z DEBUG sqlx_core::logger sqlx::query] summary="SELECT p.id, p.site, p.username, …" db.statement="\n\nSELECT\n  p.id,\n  p.site,\n  p.username,\n  p.password,\n  p.notes,\n  p.created_at,\n  p.updated_at,\n  COALESCE(\n    (\n      SELECT\n        array_agg(c.name)\n      FROM\n        categories c\n        JOIN password_categories pc ON c.id = pc.category_id\n      WHERE\n        pc.password_id = p.id\n    ),\n    ARRAY [] :: text []\n  ) as categories\nFROM\n  passwords p\nORDER BY\n  p.site ASC\n" rows_affected=616 rows_returned=616 elapsed=42.408532ms
-[2025-06-19T17:11:48Z INFO  rust_passvault::api::handlers::export rust_passvault::api::handlers::export] ✅ Successfully exported 616 passwords to CSV
-[2025-06-19T17:12:05Z DEBUG rust_passvault::api::middleware::auth rust_passvault::api::middleware::auth] 🔍 Found Bearer token in header
-[2025-06-19T17:12:05Z DEBUG rust_passvault::api::middleware::auth rust_passvault::api::middleware::auth] 🔑 Token extracted: eyJ0eXAiOi...
-[2025-06-19T17:12:05Z DEBUG rust_passvault::api::middleware::auth rust_passvault::api::middleware::auth] ✅ Token validation successful for session: 6523bc2e-0b00-46b6-84f1-1de31ee76822
-[2025-06-19T17:12:05Z DEBUG rust_passvault::api::middleware::auth rust_passvault::api::middleware::auth] ✅ Master key retrieved successfully
-[2025-06-19T17:12:05Z DEBUG rust_passvault::api::handlers::export rust_passvault::api::handlers::export] 🔍 export_csv called with query params: Query(ExportRequest { include_passwords: Some(false), include_notes: Some(true), password: None })
-[2025-06-19T17:12:05Z DEBUG rust_passvault::api::utils rust_passvault::api::utils] 🔍 extract_token called, checking for token
-[2025-06-19T17:12:05Z DEBUG rust_passvault::api::utils rust_passvault::api::utils] ✅ Using token from request extensions, session_id: 6523bc2e-0b00-46b6-84f1-1de31ee76822
-[2025-06-19T17:12:05Z DEBUG sqlx_core::logger sqlx::query] summary="SELECT p.id, p.site, p.username, …" db.statement="\n\nSELECT\n  p.id,\n  p.site,\n  p.username,\n  p.password,\n  p.notes,\n  p.created_at,\n  p.updated_at,\n  COALESCE(\n    (\n      SELECT\n        array_agg(c.name)\n      FROM\n        categories c\n        JOIN password_categories pc ON c.id = pc.category_id\n      WHERE\n        pc.password_id = p.id\n    ),\n    ARRAY [] :: text []\n  ) as categories\nFROM\n  passwords p\nORDER BY\n  p.site ASC\n" rows_affected=616 rows_returned=616 elapsed=47.741411ms
-[2025-06-19T17:12:05Z INFO  rust_passvault::api::handlers::export rust_passvault::api::handlers::export] ✅ Successfully exported 616 passwords to CSV
-[2025-06-19T17:12:26Z DEBUG rust_passvault::api::middleware::auth rust_passvault::api::middleware::auth] 🔍 Found Bearer token in header
-[2025-06-19T17:12:26Z DEBUG rust_passvault::api::middleware::auth rust_passvault::api::middleware::auth] 🔑 Token extracted: eyJ0eXAiOi...
-[2025-06-19T17:12:26Z DEBUG rust_passvault::api::middleware::auth rust_passvault::api::middleware::auth] ✅ Token validation successful for session: 6523bc2e-0b00-46b6-84f1-1de31ee76822
-[2025-06-19T17:12:26Z DEBUG rust_passvault::api::middleware::auth rust_passvault::api::middleware::auth] ✅ Master key retrieved successfully
-[2025-06-19T17:12:26Z DEBUG rust_passvault::api::handlers::export rust_passvault::api::handlers::export] 🔍 export_csv called with query params: Query(ExportRequest { include_passwords: Some(false), include_notes: Some(true), password: None })
-[2025-06-19T17:12:26Z DEBUG rust_passvault::api::utils rust_passvault::api::utils] 🔍 extract_token called, checking for token
-[2025-06-19T17:12:26Z DEBUG rust_passvault::api::utils rust_passvault::api::utils] ✅ Using token from request extensions, session_id: 6523bc2e-0b00-46b6-84f1-1de31ee76822
-[2025-06-19T17:12:26Z DEBUG sqlx_core::logger sqlx::query] summary="SELECT p.id, p.site, p.username, …" db.statement="\n\nSELECT\n  p.id,\n  p.site,\n  p.username,\n  p.password,\n  p.notes,\n  p.created_at,\n  p.updated_at,\n  COALESCE(\n    (\n      SELECT\n        array_agg(c.name)\n      FROM\n        categories c\n        JOIN password_categories pc ON c.id = pc.category_id\n      WHERE\n        pc.password_id = p.id\n    ),\n    ARRAY [] :: text []\n  ) as categories\nFROM\n  passwords p\nORDER BY\n  p.site ASC\n" rows_affected=616 rows_returned=616 elapsed=41.479326ms
-[2025-06-19T17:12:26Z INFO  rust_passvault::api::handlers::export rust_passvault::api::handlers::export] ✅ Successfully exported 616 passwords to CSV
-[2025-06-19T17:12:43Z DEBUG rust_passvault::api::middleware::auth rust_passvault::api::middleware::auth] 🔍 Found Bearer token in header
-[2025-06-19T17:12:43Z DEBUG rust_passvault::api::middleware::auth rust_passvault::api::middleware::auth] 🔑 Token extracted: eyJ0eXAiOi...
-[2025-06-19T17:12:43Z DEBUG rust_passvault::api::middleware::auth rust_passvault::api::middleware::auth] ✅ Token validation successful for session: 6523bc2e-0b00-46b6-84f1-1de31ee76822
-[2025-06-19T17:12:43Z DEBUG rust_passvault::api::middleware::auth rust_passvault::api::middleware::auth] ✅ Master key retrieved successfully
-[2025-06-19T17:12:43Z DEBUG rust_passvault::api::handlers::export rust_passvault::api::handlers::export] 🔍 export_csv called with query params: Query(ExportRequest { include_passwords: Some(false), include_notes: Some(true), password: None })
-[2025-06-19T17:12:43Z DEBUG rust_passvault::api::utils rust_passvault::api::utils] 🔍 extract_token called, checking for token
-[2025-06-19T17:12:43Z DEBUG rust_passvault::api::utils rust_passvault::api::utils] ✅ Using token from request extensions, session_id: 6523bc2e-0b00-46b6-84f1-1de31ee76822
-[2025-06-19T17:12:44Z DEBUG sqlx_core::logger sqlx::query] summary="SELECT p.id, p.site, p.username, …" db.statement="\n\nSELECT\n  p.id,\n  p.site,\n  p.username,\n  p.password,\n  p.notes,\n  p.created_at,\n  p.updated_at,\n  COALESCE(\n    (\n      SELECT\n        array_agg(c.name)\n      FROM\n        categories c\n        JOIN password_categories pc ON c.id = pc.category_id\n      WHERE\n        pc.password_id = p.id\n    ),\n    ARRAY [] :: text []\n  ) as categories\nFROM\n  passwords p\nORDER BY\n  p.site ASC\n" rows_affected=616 rows_returned=616 elapsed=40.502175ms
-[2025-06-19T17:12:44Z INFO  rust_passvault::api::handlers::export rust_passvault::api::handlers::export] ✅ Successfully exported 616 passwords to CSV
-[2025-06-19T17:12:51Z DEBUG rust_passvault::api::middleware::auth rust_passvault::api::middleware::auth] 🔍 Found Bearer token in header
-[2025-06-19T17:12:51Z DEBUG rust_passvault::api::middleware::auth rust_passvault::api::middleware::auth] 🔑 Token extracted: eyJ0eXAiOi...
-[2025-06-19T17:12:51Z DEBUG rust_passvault::api::middleware::auth rust_passvault::api::middleware::auth] ✅ Token validation successful for session: 6523bc2e-0b00-46b6-84f1-1de31ee76822
-[2025-06-19T17:12:51Z DEBUG rust_passvault::api::middleware::auth rust_passvault::api::middleware::auth] ✅ Master key retrieved successfully
-[2025-06-19T17:12:51Z DEBUG rust_passvault::api::handlers::export rust_passvault::api::handlers::export] 🔍 export_csv called with query params: Query(ExportRequest { include_passwords: Some(false), include_notes: Some(false), password: None })
-[2025-06-19T17:12:51Z DEBUG rust_passvault::api::utils rust_passvault::api::utils] 🔍 extract_token called, checking for token
-[2025-06-19T17:12:51Z DEBUG rust_passvault::api::utils rust_passvault::api::utils] ✅ Using token from request extensions, session_id: 6523bc2e-0b00-46b6-84f1-1de31ee76822
-[2025-06-19T17:12:51Z DEBUG sqlx_core::logger sqlx::query] summary="SELECT p.id, p.site, p.username, …" db.statement="\n\nSELECT\n  p.id,\n  p.site,\n  p.username,\n  p.password,\n  p.notes,\n  p.created_at,\n  p.updated_at,\n  COALESCE(\n    (\n      SELECT\n        array_agg(c.name)\n      FROM\n        categories c\n        JOIN password_categories pc ON c.id = pc.category_id\n      WHERE\n        pc.password_id = p.id\n    ),\n    ARRAY [] :: text []\n  ) as categories\nFROM\n  passwords p\nORDER BY\n  p.site ASC\n" rows_affected=616 rows_returned=616 elapsed=44.581813ms
-[2025-06-19T17:12:51Z INFO  rust_passvault::api::handlers::export rust_passvault::api::handlers::export] ✅ Successfully exported 616 passwords to CSV
-[2025-06-19T17:15:31Z DEBUG rust_passvault rust_passvault] Running scheduled cleanup of expired sessions
-[2025-06-19T17:19:36Z ERROR rust_passvault rust_passvault] CLI menu error: OperationInterrupted
+[2025-06-19T17:45:06Z INFO  rust_passvault rust_passvault] 🔒 Starting SecureVault - Password Manager & Privacy Shield
+[2025-06-19T17:45:06Z DEBUG rust_passvault rust_passvault] Initializing application...
+[2025-06-19T17:45:06Z DEBUG rust_passvault rust_passvault] Attempting database connection...
+[2025-06-19T17:45:06Z INFO  rust_passvault::db::postgres rust_passvault::db::postgres] Initializing PostgreSQL database...
+[2025-06-19T17:45:06Z INFO  rust_passvault::db::postgres rust_passvault::db::postgres] Connected to PostgreSQL
+[2025-06-19T17:45:06Z INFO  sqlx_postgres::connection::stream sqlx::postgres::notice] relation "config" already exists, skipping
+[2025-06-19T17:45:06Z DEBUG sqlx_core::logger sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS config (\n  key TEXT PRIMARY KEY,\n  value TEXT NOT NULL,\n  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()\n);\n" rows_affected=0 rows_returned=0 elapsed=6.629779ms
+[2025-06-19T17:45:06Z INFO  sqlx_postgres::connection::stream sqlx::postgres::notice] relation "passwords" already exists, skipping
+[2025-06-19T17:45:06Z DEBUG sqlx_core::logger sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS passwords (\n  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),\n  site TEXT NOT NULL,\n  username TEXT NOT NULL,\n  password BYTEA NOT NULL,\n  notes TEXT,\n  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),\n  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()\n);\n" rows_affected=0 rows_returned=0 elapsed=7.134991ms
+[2025-06-19T17:45:06Z INFO  sqlx_postgres::connection::stream sqlx::postgres::notice] relation "categories" already exists, skipping
+[2025-06-19T17:45:06Z DEBUG sqlx_core::logger sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS categories (\n  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),\n  name TEXT NOT NULL UNIQUE\n);\n" rows_affected=0 rows_returned=0 elapsed=8.913827ms
+[2025-06-19T17:45:06Z INFO  sqlx_postgres::connection::stream sqlx::postgres::notice] relation "password_categories" already exists, skipping
+[2025-06-19T17:45:06Z DEBUG sqlx_core::logger sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS password_categories (\n  password_id UUID REFERENCES passwords(id) ON DELETE CASCADE,\n  category_id UUID REFERENCES categories(id) ON DELETE CASCADE,\n  PRIMARY KEY (password_id, category_id)\n);\n" rows_affected=0 rows_returned=0 elapsed=8.406188ms
+[2025-06-19T17:45:06Z INFO  sqlx_postgres::connection::stream sqlx::postgres::notice] relation "idx_passwords_site" already exists, skipping
+[2025-06-19T17:45:06Z DEBUG sqlx_core::logger sqlx::query] summary="CREATE INDEX IF NOT …" db.statement="\n\nCREATE INDEX IF NOT EXISTS idx_passwords_site ON passwords(site);\n" rows_affected=0 rows_returned=0 elapsed=9.193875ms
+[2025-06-19T17:45:06Z INFO  sqlx_postgres::connection::stream sqlx::postgres::notice] relation "idx_password_categories" already exists, skipping
+[2025-06-19T17:45:06Z DEBUG sqlx_core::logger sqlx::query] summary="CREATE INDEX IF NOT …" db.statement="\n\nCREATE INDEX IF NOT EXISTS idx_password_categories ON password_categories(password_id);\n" rows_affected=0 rows_returned=0 elapsed=9.542526ms
+[2025-06-19T17:45:06Z DEBUG sqlx_core::logger sqlx::query] summary="SELECT gen_random_uuid();" db.statement="" rows_affected=0 rows_returned=1 elapsed=8.239594ms
+[2025-06-19T17:45:06Z DEBUG rust_passvault rust_passvault] Database connection established successfully
+[2025-06-19T17:45:06Z DEBUG rust_passvault rust_passvault] Setting up signal handlers
+[2025-06-19T17:45:06Z DEBUG rust_passvault rust_passvault] Creating vault and service instances
+[2025-06-19T17:45:06Z DEBUG rust_passvault rust_passvault] API will run on port: 5000
+[2025-06-19T17:45:06Z DEBUG rust_passvault rust_passvault] Starting recovery cleanup task
+[2025-06-19T17:45:06Z DEBUG rust_passvault rust_passvault] Starting API server in background thread
+[2025-06-19T17:45:06Z DEBUG rust_passvault rust_passvault] Launching interactive CLI menu
+[2025-06-19T17:45:06Z DEBUG rust_passvault rust_passvault] Running scheduled cleanup of expired sessions
+[2025-06-19T17:45:06Z DEBUG rust_passvault rust_passvault] Created new tokio runtime for API server
+[2025-06-19T17:45:06Z DEBUG rust_passvault rust_passvault] API server starting...
+[2025-06-19T17:45:06Z INFO  rust_passvault::api rust_passvault::api] Starting RustVault API server on port 5000
+[2025-06-19T17:45:06Z INFO  actix_server::builder actix_server::builder] starting 16 workers
+[2025-06-19T17:45:06Z INFO  actix_server::server actix_server::server] Tokio runtime found; starting in existing Tokio runtime
+[2025-06-19T17:45:06Z INFO  actix_server::server actix_server::server] starting service: "actix-web-service-0.0.0.0:5000", workers: 16, listening on: 0.0.0.0:5000
+[2025-06-19T17:45:06Z DEBUG sqlx_core::logger sqlx::query] summary="SELECT value FROM config …" db.statement="\n\nSELECT\n  value\nFROM\n  config\nWHERE\n  key = $1\n" rows_affected=0 rows_returned=1 elapsed=11.252199ms
+[2025-06-19T17:49:42Z ERROR rust_passvault rust_passvault] CLI menu error: OperationInterrupted
