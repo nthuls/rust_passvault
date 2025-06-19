@@ -1,0 +1,997 @@
+   Compiling rust_passvault v0.1.0 (/home/nthuli/PycharmProjects/RUST_PROJECTS/rust_passvault)
+warning: unused imports: `OpenApi` and `Path`
+  --> src/api/handlers/auth.rs:12:14
+   |
+12 | use utoipa::{OpenApi, Path};
+   |              ^^^^^^^  ^^^^
+   |
+   = note: `#[warn(unused_imports)]` on by default
+
+warning: unused import: `utoipa::path`
+  --> src/api/handlers/recovery.rs:13:5
+   |
+13 | use utoipa::path;
+   |     ^^^^^^^^^^^^
+
+warning: unused import: `utoipa::path`
+  --> src/api/handlers/categories.rs:13:5
+   |
+13 | use utoipa::path;
+   |     ^^^^^^^^^^^^
+
+warning: unused import: `utoipa::path`
+  --> src/api/handlers/generator.rs:12:5
+   |
+12 | use utoipa::path;
+   |     ^^^^^^^^^^^^
+
+warning: unused import: `utoipa::path`
+  --> src/api/handlers/passwords.rs:14:5
+   |
+14 | use utoipa::path;
+   |     ^^^^^^^^^^^^
+
+warning: unused import: `utoipa::path`
+  --> src/api/handlers/import.rs:21:5
+   |
+21 | use utoipa::path;
+   |     ^^^^^^^^^^^^
+
+warning: unused import: `utoipa::path`
+  --> src/api/handlers/export.rs:12:5
+   |
+12 | use utoipa::path;
+   |     ^^^^^^^^^^^^
+
+warning: unused import: `utoipa::path`
+ --> src/api/handlers/tools.rs:7:5
+  |
+7 | use utoipa::path;
+  |     ^^^^^^^^^^^^
+
+warning: unused import: `utoipa::path`
+ --> src/api/handlers/education.rs:7:5
+  |
+7 | use utoipa::path;
+  |     ^^^^^^^^^^^^
+
+warning: unused import: `crate::core::vault::Vault`
+ --> src/api/handlers/privacy.rs:4:5
+  |
+4 | use crate::core::vault::Vault;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `utoipa::path`
+  --> src/api/handlers/privacy.rs:11:5
+   |
+11 | use utoipa::path;
+   |     ^^^^^^^^^^^^
+
+warning: unused import: `FirefoxFingerprintingRequest`
+  --> src/api/handlers/privacy.rs:20:5
+   |
+20 |     FirefoxFingerprintingRequest,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `utoipa::path`
+  --> src/api/handlers/system.rs:12:5
+   |
+12 | use utoipa::path;
+   |     ^^^^^^^^^^^^
+
+warning: unused import: `path`
+  --> src/api/handlers/backups.rs:15:14
+   |
+15 | use utoipa::{path, ToSchema};
+   |              ^^^^
+
+warning: unused import: `utoipa::path`
+  --> src/api/handlers/json_api.rs:14:5
+   |
+14 | use utoipa::path;
+   |     ^^^^^^^^^^^^
+
+warning: unused imports: `Context` and `Poll`
+  --> src/api/middleware/auth.rs:10:17
+   |
+10 | use std::task::{Context, Poll};
+   |                 ^^^^^^^  ^^^^
+
+warning: unused import: `base64::engine::general_purpose`
+ --> src/core/auth.rs:9:5
+  |
+9 | use base64::engine::general_purpose;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `vault::Vault`
+ --> src/core/mod.rs:6:9
+  |
+6 | pub use vault::Vault;
+  |         ^^^^^^^^^^^^
+
+warning: unused import: `auth::AuthManager`
+ --> src/core/mod.rs:7:9
+  |
+7 | pub use auth::AuthManager;
+  |         ^^^^^^^^^^^^^^^^^
+
+warning: unused import: `std::fs`
+ --> src/utils/io.rs:2:5
+  |
+2 | use std::fs;
+  |     ^^^^^^^
+
+warning: unused import: `std::path::PathBuf`
+ --> src/utils/io.rs:3:5
+  |
+3 | use std::path::PathBuf;
+  |     ^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `dirs`
+ --> src/utils/io.rs:4:5
+  |
+4 | use dirs;
+  |     ^^^^
+
+warning: unused import: `sqlx::Row`
+ --> src/db/mod.rs:5:5
+  |
+5 | use sqlx::Row;
+  |     ^^^^^^^^^
+
+warning: unused import: `sqlx::postgres::PgRow`
+ --> src/db/postgres.rs:4:5
+  |
+4 | use sqlx::postgres::PgRow;
+  |     ^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `Path`
+ --> src/importers/chrome.rs:3:17
+  |
+3 | use std::path::{Path, PathBuf};
+  |                 ^^^^
+
+warning: unused imports: `Error as SqliteError` and `Result as SqliteResult`
+ --> src/importers/chrome.rs:8:28
+  |
+8 | use rusqlite::{Connection, Result as SqliteResult, Error as SqliteError, OpenFlags};
+  |                            ^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `debug`, `info`, and `warn`
+  --> src/importers/chrome.rs:13:11
+   |
+13 | use log::{info, warn, error, debug};
+   |           ^^^^  ^^^^         ^^^^^
+
+warning: unused import: `Path`
+ --> src/importers/edge.rs:3:17
+  |
+3 | use std::path::{Path, PathBuf};
+  |                 ^^^^
+
+warning: unused imports: `Error as SqliteError` and `Result as SqliteResult`
+ --> src/importers/edge.rs:8:28
+  |
+8 | use rusqlite::{Connection, Result as SqliteResult, Error as SqliteError, OpenFlags};
+  |                            ^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `debug`, `info`, and `warn`
+  --> src/importers/edge.rs:13:11
+   |
+13 | use log::{info, warn, error, debug};
+   |           ^^^^  ^^^^         ^^^^^
+
+warning: unused import: `std::path::Path`
+ --> src/system/mod.rs:2:5
+  |
+2 | use std::path::Path;
+  |     ^^^^^^^^^^^^^^^
+
+warning: unused import: `std::process::Command`
+ --> src/system/mod.rs:3:5
+  |
+3 | use std::process::Command;
+  |     ^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `Path`
+ --> src/system/firejail.rs:2:17
+  |
+2 | use std::path::{Path, PathBuf};
+  |                 ^^^^
+
+warning: unused import: `Child`
+ --> src/system/firejail.rs:3:29
+  |
+3 | use std::process::{Command, Child, Stdio};
+  |                             ^^^^^
+
+warning: unused import: `crate::privacy::profiles::PrivacyProfile`
+ --> src/system/firejail.rs:8:5
+  |
+8 | use crate::privacy::profiles::PrivacyProfile;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `std::time::SystemTime`
+   --> src/system/mod.rs:136:17
+    |
+136 |             use std::time::SystemTime;
+    |                 ^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `crate::db::Database`
+ --> src/privacy/mod.rs:8:5
+  |
+8 | use crate::db::Database;
+  |     ^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `Path`
+ --> src/privacy/browsers/firefox.rs:3:17
+  |
+3 | use std::path::{Path, PathBuf};
+  |                 ^^^^
+
+warning: unused import: `Write`
+ --> src/privacy/browsers/firefox.rs:5:35
+  |
+5 | use std::io::{BufRead, BufReader, Write};
+  |                                   ^^^^^
+
+warning: unused import: `PrivacySettings`
+  --> src/privacy/mod.rs:17:31
+   |
+17 | use levels::{ProtectionLevel, PrivacySettings};
+   |                               ^^^^^^^^^^^^^^^
+
+warning: unused import: `Path`
+ --> src/backups/mod.rs:2:17
+  |
+2 | use std::path::{Path, PathBuf};
+  |                 ^^^^
+
+warning: unused import: `std::error::Error`
+ --> src/education/mod.rs:3:5
+  |
+3 | use std::error::Error;
+  |     ^^^^^^^^^^^^^^^^^
+
+warning: unused import: `uuid::Uuid`
+ --> src/education/mod.rs:4:5
+  |
+4 | use uuid::Uuid;
+  |     ^^^^^^^^^^
+
+warning: unused import: `Path`
+ --> src/logging/mod.rs:2:17
+  |
+2 | use std::path::{Path, PathBuf};
+  |                 ^^^^
+
+warning: unused import: `crate::db::Database`
+  --> src/main.rs:25:5
+   |
+25 | use crate::db::Database;
+   |     ^^^^^^^^^^^^^^^^^^^
+
+warning: variable does not need to be mutable
+   --> src/cli/menu.rs:121:9
+    |
+121 |     let mut password_generator = PasswordGenerator::new();
+    |         ----^^^^^^^^^^^^^^^^^^
+    |         |
+    |         help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` on by default
+
+warning: value assigned to `param_idx` is never read
+   --> src/db/postgres.rs:255:13
+    |
+255 |             param_idx += 1;
+    |             ^^^^^^^^^
+    |
+    = help: maybe it is overwritten before being read?
+    = note: `#[warn(unused_assignments)]` on by default
+
+warning: value assigned to `where_added` is never read
+   --> src/db/sqlite.rs:303:17
+    |
+303 |                 where_added = true;
+    |                 ^^^^^^^^^^^
+    |
+    = help: maybe it is overwritten before being read?
+
+warning: value assigned to `bind_idx` is never read
+   --> src/db/postgres.rs:579:21
+    |
+579 |                     bind_idx += 1;
+    |                     ^^^^^^^^
+    |
+    = help: maybe it is overwritten before being read?
+
+warning: value assigned to `bind_idx` is never read
+   --> src/db/postgres.rs:353:13
+    |
+353 |             bind_idx += 1;
+    |             ^^^^^^^^
+    |
+    = help: maybe it is overwritten before being read?
+
+warning: unused variable: `token`
+  --> src/cli/handlers.rs:71:49
+   |
+71 | pub async fn handle_web_password(vault: &Vault, token: &str) -> Result<(), Box<dyn Error>> {
+   |                                                 ^^^^^ help: if this is intentional, prefix it with an underscore: `_token`
+   |
+   = note: `#[warn(unused_variables)]` on by default
+
+warning: unused variable: `e`
+   --> src/recovery/mod.rs:355:17
+    |
+355 |             Err(e) => {
+    |                 ^ help: if this is intentional, prefix it with an underscore: `_e`
+
+warning: unused variable: `token`
+  --> src/api/handlers/categories.rs:36:10
+   |
+36 |     let (token, _) = match extract_token(&req) {
+   |          ^^^^^ help: if this is intentional, prefix it with an underscore: `_token`
+
+warning: unused variable: `token`
+   --> src/api/handlers/categories.rs:102:10
+    |
+102 |     let (token, _) = match extract_token(&req) {
+    |          ^^^^^ help: if this is intentional, prefix it with an underscore: `_token`
+
+warning: unused variable: `token`
+   --> src/api/handlers/categories.rs:174:10
+    |
+174 |     let (token, _) = match extract_token(&req) {
+    |          ^^^^^ help: if this is intentional, prefix it with an underscore: `_token`
+
+warning: unused variable: `new_category_id`
+   --> src/api/handlers/categories.rs:238:9
+    |
+238 |     let new_category_id = match db.get_or_create_category(&category_req.name).await {
+    |         ^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_new_category_id`
+
+warning: unused variable: `token`
+   --> src/api/handlers/categories.rs:373:10
+    |
+373 |     let (token, _) = match extract_token(&req) {
+    |          ^^^^^ help: if this is intentional, prefix it with an underscore: `_token`
+
+warning: unused variable: `token`
+   --> src/api/handlers/import.rs:112:10
+    |
+112 |     let (token, session_id) = match extract_token(&req) {
+    |          ^^^^^ help: if this is intentional, prefix it with an underscore: `_token`
+
+warning: unused variable: `session_id`
+   --> src/api/handlers/import.rs:112:17
+    |
+112 |     let (token, session_id) = match extract_token(&req) {
+    |                 ^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_session_id`
+
+warning: unused variable: `token`
+   --> src/api/handlers/import.rs:228:10
+    |
+228 |     let (token, session_id) = match extract_token(&req) {
+    |          ^^^^^ help: if this is intentional, prefix it with an underscore: `_token`
+
+warning: unused variable: `session_id`
+   --> src/api/handlers/import.rs:228:17
+    |
+228 |     let (token, session_id) = match extract_token(&req) {
+    |                 ^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_session_id`
+
+warning: unused variable: `token`
+   --> src/api/handlers/import.rs:312:10
+    |
+312 |     let (token, session_id) = match extract_token(&req) {
+    |          ^^^^^ help: if this is intentional, prefix it with an underscore: `_token`
+
+warning: unused variable: `session_id`
+   --> src/api/handlers/import.rs:312:17
+    |
+312 |     let (token, session_id) = match extract_token(&req) {
+    |                 ^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_session_id`
+
+warning: unused variable: `token`
+   --> src/api/handlers/import.rs:398:10
+    |
+398 |     let (token, session_id) = match extract_token(&req) {
+    |          ^^^^^ help: if this is intentional, prefix it with an underscore: `_token`
+
+warning: unused variable: `session_id`
+   --> src/api/handlers/import.rs:398:17
+    |
+398 |     let (token, session_id) = match extract_token(&req) {
+    |                 ^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_session_id`
+
+warning: unused variable: `token`
+   --> src/api/handlers/import.rs:573:10
+    |
+573 |     let (token, session_id) = match extract_token(&req) {
+    |          ^^^^^ help: if this is intentional, prefix it with an underscore: `_token`
+
+warning: unused variable: `tx`
+   --> src/api/handlers/import.rs:726:13
+    |
+726 |     let mut tx = match db.begin_transaction().await {
+    |             ^^ help: if this is intentional, prefix it with an underscore: `_tx`
+
+warning: variable does not need to be mutable
+   --> src/api/handlers/import.rs:726:9
+    |
+726 |     let mut tx = match db.begin_transaction().await {
+    |         ----^^
+    |         |
+    |         help: remove this `mut`
+
+warning: unused variable: `query`
+  --> src/api/handlers/export.rs:37:5
+   |
+37 |     query: web::Query<ExportRequest>,
+   |     ^^^^^ help: if this is intentional, prefix it with an underscore: `_query`
+
+warning: unused variable: `token`
+  --> src/api/handlers/export.rs:40:10
+   |
+40 |     let (token, _) = match extract_token(&req) {
+   |          ^^^^^ help: if this is intentional, prefix it with an underscore: `_token`
+
+warning: unreachable expression
+   --> src/api/handlers/export.rs:322:5
+    |
+154 |       let result = match extract_token(&req) {
+    |  __________________-
+155 | |         Ok((token, session_id)) => {
+156 | |             // Get master key
+157 | |             let master_key = match vault.auth_manager.get_master_key(&session_id) {
+...   |
+319 | |         }
+320 | |     };
+    | |_____- any code following this `match` expression is unreachable, as all arms diverge
+321 |       
+322 |       result
+    |       ^^^^^^ unreachable expression
+    |
+    = note: `#[warn(unreachable_code)]` on by default
+
+warning: unused variable: `result`
+   --> src/api/handlers/export.rs:154:9
+    |
+154 |     let result = match extract_token(&req) {
+    |         ^^^^^^ help: if this is intentional, prefix it with an underscore: `_result`
+
+warning: unused variable: `token`
+   --> src/api/handlers/export.rs:155:13
+    |
+155 |         Ok((token, session_id)) => {
+    |             ^^^^^ help: if this is intentional, prefix it with an underscore: `_token`
+
+warning: unused variable: `vault`
+  --> src/api/handlers/system.rs:79:5
+   |
+79 |     vault: web::Data<Arc<Vault>>,
+   |     ^^^^^ help: if this is intentional, prefix it with an underscore: `_vault`
+
+warning: unused variable: `vault`
+   --> src/api/handlers/system.rs:156:5
+    |
+156 |     vault: web::Data<Arc<Vault>>,
+    |     ^^^^^ help: if this is intentional, prefix it with an underscore: `_vault`
+
+warning: unused variable: `vault`
+   --> src/api/handlers/system.rs:246:5
+    |
+246 |     vault: web::Data<Arc<Vault>>,
+    |     ^^^^^ help: if this is intentional, prefix it with an underscore: `_vault`
+
+warning: unused variable: `vault`
+  --> src/api/handlers/backups.rs:34:5
+   |
+34 |     vault: web::Data<Arc<Vault>>,
+   |     ^^^^^ help: if this is intentional, prefix it with an underscore: `_vault`
+
+warning: unused variable: `vault`
+   --> src/api/handlers/backups.rs:325:5
+    |
+325 |     vault: web::Data<Arc<Vault>>,
+    |     ^^^^^ help: if this is intentional, prefix it with an underscore: `_vault`
+
+warning: unused variable: `vault`
+   --> src/api/handlers/backups.rs:410:5
+    |
+410 |     vault: web::Data<Arc<Vault>>,
+    |     ^^^^^ help: if this is intentional, prefix it with an underscore: `_vault`
+
+warning: unused variable: `firefox_importer`
+   --> src/api/handlers/json_api.rs:408:25
+    |
+408 |                     let firefox_importer = FirefoxImporter::new();
+    |                         ^^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_firefox_importer`
+
+warning: unused variable: `db`
+   --> src/api/handlers/json_api.rs:411:25
+    |
+411 |                     let db = vault.get_db_ref();
+    |                         ^^ help: if this is intentional, prefix it with an underscore: `_db`
+
+warning: unused variable: `token`
+   --> src/api/handlers/json_api.rs:759:17
+    |
+759 |             let token = json_data["token"].as_str().ok_or("Missing token")?;
+    |                 ^^^^^ help: if this is intentional, prefix it with an underscore: `_token`
+
+error[E0277]: the trait bound `ProtectionLevel: ToSchema<'_>` is not satisfied
+   --> src/api/mod.rs:149:13
+    |
+149 |             crate::privacy::levels::ProtectionLevel,
+    |             -----^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |             |
+    |             the trait `ToSchema<'_>` is not implemented for `ProtectionLevel`
+    |             required by a bound introduced by this call
+    |
+    = help: the following other types implement trait `ToSchema<'__s>`:
+              ()
+              AddCategoryRequest
+              AddPasswordRequest
+              BackupListResponse
+              BongaSmsResponse
+              CategoryEntry
+              CategoryListResponse
+              ChangePasswordRequest
+            and 51 others
+note: required by a bound in `ComponentsBuilder::schema_from`
+   --> /home/nthuli/.cargo/registry/src/index.crates.io-6f17d22bba15001f/utoipa-4.2.3/src/openapi/schema.rs:138:31
+    |
+138 |     pub fn schema_from<'s, I: ToSchema<'s>>(mut self) -> Self {
+    |                               ^^^^^^^^^^^^ required by this bound in `ComponentsBuilder::schema_from`
+
+error[E0277]: the trait bound `PrivacySettings: ToSchema<'_>` is not satisfied
+   --> src/api/mod.rs:150:13
+    |
+150 |             crate::privacy::levels::PrivacySettings,
+    |             -----^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |             |
+    |             the trait `ToSchema<'_>` is not implemented for `PrivacySettings`
+    |             required by a bound introduced by this call
+    |
+    = help: the following other types implement trait `ToSchema<'__s>`:
+              ()
+              AddCategoryRequest
+              AddPasswordRequest
+              BackupListResponse
+              BongaSmsResponse
+              CategoryEntry
+              CategoryListResponse
+              ChangePasswordRequest
+            and 51 others
+note: required by a bound in `ComponentsBuilder::schema_from`
+   --> /home/nthuli/.cargo/registry/src/index.crates.io-6f17d22bba15001f/utoipa-4.2.3/src/openapi/schema.rs:138:31
+    |
+138 |     pub fn schema_from<'s, I: ToSchema<'s>>(mut self) -> Self {
+    |                               ^^^^^^^^^^^^ required by this bound in `ComponentsBuilder::schema_from`
+
+error[E0277]: the trait bound `FingerprintSettings: ToSchema<'_>` is not satisfied
+   --> src/api/mod.rs:151:13
+    |
+151 |             crate::privacy::fingerprint::FingerprintSettings,
+    |             -----^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |             |
+    |             the trait `ToSchema<'_>` is not implemented for `FingerprintSettings`
+    |             required by a bound introduced by this call
+    |
+    = help: the following other types implement trait `ToSchema<'__s>`:
+              ()
+              AddCategoryRequest
+              AddPasswordRequest
+              BackupListResponse
+              BongaSmsResponse
+              CategoryEntry
+              CategoryListResponse
+              ChangePasswordRequest
+            and 51 others
+note: required by a bound in `ComponentsBuilder::schema_from`
+   --> /home/nthuli/.cargo/registry/src/index.crates.io-6f17d22bba15001f/utoipa-4.2.3/src/openapi/schema.rs:138:31
+    |
+138 |     pub fn schema_from<'s, I: ToSchema<'s>>(mut self) -> Self {
+    |                               ^^^^^^^^^^^^ required by this bound in `ComponentsBuilder::schema_from`
+
+error[E0277]: the trait bound `StorageSettings: ToSchema<'_>` is not satisfied
+   --> src/api/mod.rs:152:13
+    |
+152 |             crate::privacy::storage::StorageSettings,
+    |             -----^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |             |
+    |             the trait `ToSchema<'_>` is not implemented for `StorageSettings`
+    |             required by a bound introduced by this call
+    |
+    = help: the following other types implement trait `ToSchema<'__s>`:
+              ()
+              AddCategoryRequest
+              AddPasswordRequest
+              BackupListResponse
+              BongaSmsResponse
+              CategoryEntry
+              CategoryListResponse
+              ChangePasswordRequest
+            and 51 others
+note: required by a bound in `ComponentsBuilder::schema_from`
+   --> /home/nthuli/.cargo/registry/src/index.crates.io-6f17d22bba15001f/utoipa-4.2.3/src/openapi/schema.rs:138:31
+    |
+138 |     pub fn schema_from<'s, I: ToSchema<'s>>(mut self) -> Self {
+    |                               ^^^^^^^^^^^^ required by this bound in `ComponentsBuilder::schema_from`
+
+error[E0277]: the trait bound `NetworkSettings: ToSchema<'_>` is not satisfied
+   --> src/api/mod.rs:153:13
+    |
+153 |             crate::privacy::network::NetworkSettings,
+    |             -----^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |             |
+    |             the trait `ToSchema<'_>` is not implemented for `NetworkSettings`
+    |             required by a bound introduced by this call
+    |
+    = help: the following other types implement trait `ToSchema<'__s>`:
+              ()
+              AddCategoryRequest
+              AddPasswordRequest
+              BackupListResponse
+              BongaSmsResponse
+              CategoryEntry
+              CategoryListResponse
+              ChangePasswordRequest
+            and 51 others
+note: required by a bound in `ComponentsBuilder::schema_from`
+   --> /home/nthuli/.cargo/registry/src/index.crates.io-6f17d22bba15001f/utoipa-4.2.3/src/openapi/schema.rs:138:31
+    |
+138 |     pub fn schema_from<'s, I: ToSchema<'s>>(mut self) -> Self {
+    |                               ^^^^^^^^^^^^ required by this bound in `ComponentsBuilder::schema_from`
+
+error[E0277]: the trait bound `FirefoxSettings: ToSchema<'_>` is not satisfied
+   --> src/api/mod.rs:154:13
+    |
+154 |             crate::privacy::browsers::firefox::FirefoxSettings,
+    |             -----^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |             |
+    |             the trait `ToSchema<'_>` is not implemented for `FirefoxSettings`
+    |             required by a bound introduced by this call
+    |
+    = help: the following other types implement trait `ToSchema<'__s>`:
+              ()
+              AddCategoryRequest
+              AddPasswordRequest
+              BackupListResponse
+              BongaSmsResponse
+              CategoryEntry
+              CategoryListResponse
+              ChangePasswordRequest
+            and 51 others
+note: required by a bound in `ComponentsBuilder::schema_from`
+   --> /home/nthuli/.cargo/registry/src/index.crates.io-6f17d22bba15001f/utoipa-4.2.3/src/openapi/schema.rs:138:31
+    |
+138 |     pub fn schema_from<'s, I: ToSchema<'s>>(mut self) -> Self {
+    |                               ^^^^^^^^^^^^ required by this bound in `ComponentsBuilder::schema_from`
+
+error[E0277]: the trait bound `PrivacyStatus: ToSchema<'_>` is not satisfied
+   --> src/api/mod.rs:155:13
+    |
+155 |             crate::privacy::PrivacyStatus,
+    |             -----^^^^^^^^^^^^^^^^^^^^^^^^
+    |             |
+    |             the trait `ToSchema<'_>` is not implemented for `PrivacyStatus`
+    |             required by a bound introduced by this call
+    |
+    = help: the following other types implement trait `ToSchema<'__s>`:
+              ()
+              AddCategoryRequest
+              AddPasswordRequest
+              BackupListResponse
+              BongaSmsResponse
+              CategoryEntry
+              CategoryListResponse
+              ChangePasswordRequest
+            and 51 others
+note: required by a bound in `ComponentsBuilder::schema_from`
+   --> /home/nthuli/.cargo/registry/src/index.crates.io-6f17d22bba15001f/utoipa-4.2.3/src/openapi/schema.rs:138:31
+    |
+138 |     pub fn schema_from<'s, I: ToSchema<'s>>(mut self) -> Self {
+    |                               ^^^^^^^^^^^^ required by this bound in `ComponentsBuilder::schema_from`
+
+error[E0277]: the trait bound `DnsSettings: ToSchema<'_>` is not satisfied
+   --> src/api/mod.rs:156:13
+    |
+156 |             crate::privacy::network::dns::DnsSettings,
+    |             -----^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |             |
+    |             the trait `ToSchema<'_>` is not implemented for `DnsSettings`
+    |             required by a bound introduced by this call
+    |
+    = help: the following other types implement trait `ToSchema<'__s>`:
+              ()
+              AddCategoryRequest
+              AddPasswordRequest
+              BackupListResponse
+              BongaSmsResponse
+              CategoryEntry
+              CategoryListResponse
+              ChangePasswordRequest
+            and 51 others
+note: required by a bound in `ComponentsBuilder::schema_from`
+   --> /home/nthuli/.cargo/registry/src/index.crates.io-6f17d22bba15001f/utoipa-4.2.3/src/openapi/schema.rs:138:31
+    |
+138 |     pub fn schema_from<'s, I: ToSchema<'s>>(mut self) -> Self {
+    |                               ^^^^^^^^^^^^ required by this bound in `ComponentsBuilder::schema_from`
+
+error[E0277]: the trait bound `SystemStatus: ToSchema<'_>` is not satisfied
+   --> src/api/mod.rs:159:13
+    |
+159 |             crate::system::SystemStatus,
+    |             -----^^^^^^^^^^^^^^^^^^^^^^
+    |             |
+    |             the trait `ToSchema<'_>` is not implemented for `SystemStatus`
+    |             required by a bound introduced by this call
+    |
+    = help: the following other types implement trait `ToSchema<'__s>`:
+              ()
+              AddCategoryRequest
+              AddPasswordRequest
+              BackupListResponse
+              BongaSmsResponse
+              CategoryEntry
+              CategoryListResponse
+              ChangePasswordRequest
+            and 51 others
+note: required by a bound in `ComponentsBuilder::schema_from`
+   --> /home/nthuli/.cargo/registry/src/index.crates.io-6f17d22bba15001f/utoipa-4.2.3/src/openapi/schema.rs:138:31
+    |
+138 |     pub fn schema_from<'s, I: ToSchema<'s>>(mut self) -> Self {
+    |                               ^^^^^^^^^^^^ required by this bound in `ComponentsBuilder::schema_from`
+
+error[E0277]: the trait bound `FirejailStatus: ToSchema<'_>` is not satisfied
+   --> src/api/mod.rs:160:13
+    |
+160 |             crate::system::firejail::FirejailStatus,
+    |             -----^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |             |
+    |             the trait `ToSchema<'_>` is not implemented for `FirejailStatus`
+    |             required by a bound introduced by this call
+    |
+    = help: the following other types implement trait `ToSchema<'__s>`:
+              ()
+              AddCategoryRequest
+              AddPasswordRequest
+              BackupListResponse
+              BongaSmsResponse
+              CategoryEntry
+              CategoryListResponse
+              ChangePasswordRequest
+            and 51 others
+note: required by a bound in `ComponentsBuilder::schema_from`
+   --> /home/nthuli/.cargo/registry/src/index.crates.io-6f17d22bba15001f/utoipa-4.2.3/src/openapi/schema.rs:138:31
+    |
+138 |     pub fn schema_from<'s, I: ToSchema<'s>>(mut self) -> Self {
+    |                               ^^^^^^^^^^^^ required by this bound in `ComponentsBuilder::schema_from`
+
+error[E0277]: the trait bound `LaunchBrowserRequest: ToSchema<'_>` is not satisfied
+   --> src/api/mod.rs:161:13
+    |
+161 |             crate::system::firejail::LaunchBrowserRequest,
+    |             -----^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |             |
+    |             the trait `ToSchema<'_>` is not implemented for `LaunchBrowserRequest`
+    |             required by a bound introduced by this call
+    |
+    = help: the following other types implement trait `ToSchema<'__s>`:
+              ()
+              AddCategoryRequest
+              AddPasswordRequest
+              BackupListResponse
+              BongaSmsResponse
+              CategoryEntry
+              CategoryListResponse
+              ChangePasswordRequest
+            and 51 others
+note: required by a bound in `ComponentsBuilder::schema_from`
+   --> /home/nthuli/.cargo/registry/src/index.crates.io-6f17d22bba15001f/utoipa-4.2.3/src/openapi/schema.rs:138:31
+    |
+138 |     pub fn schema_from<'s, I: ToSchema<'s>>(mut self) -> Self {
+    |                               ^^^^^^^^^^^^ required by this bound in `ComponentsBuilder::schema_from`
+
+error[E0277]: the trait bound `ActiveBrowser: ToSchema<'_>` is not satisfied
+   --> src/api/mod.rs:162:13
+    |
+162 |             crate::system::firejail::ActiveBrowser,
+    |             -----^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |             |
+    |             the trait `ToSchema<'_>` is not implemented for `ActiveBrowser`
+    |             required by a bound introduced by this call
+    |
+    = help: the following other types implement trait `ToSchema<'__s>`:
+              ()
+              AddCategoryRequest
+              AddPasswordRequest
+              BackupListResponse
+              BongaSmsResponse
+              CategoryEntry
+              CategoryListResponse
+              ChangePasswordRequest
+            and 51 others
+note: required by a bound in `ComponentsBuilder::schema_from`
+   --> /home/nthuli/.cargo/registry/src/index.crates.io-6f17d22bba15001f/utoipa-4.2.3/src/openapi/schema.rs:138:31
+    |
+138 |     pub fn schema_from<'s, I: ToSchema<'s>>(mut self) -> Self {
+    |                               ^^^^^^^^^^^^ required by this bound in `ComponentsBuilder::schema_from`
+
+error[E0277]: the trait bound `BrowserInfo: ToSchema<'_>` is not satisfied
+   --> src/api/mod.rs:163:13
+    |
+163 |             crate::system::firejail::BrowserInfo,
+    |             -----^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |             |
+    |             the trait `ToSchema<'_>` is not implemented for `BrowserInfo`
+    |             required by a bound introduced by this call
+    |
+    = help: the following other types implement trait `ToSchema<'__s>`:
+              ()
+              AddCategoryRequest
+              AddPasswordRequest
+              BackupListResponse
+              BongaSmsResponse
+              CategoryEntry
+              CategoryListResponse
+              ChangePasswordRequest
+            and 51 others
+note: required by a bound in `ComponentsBuilder::schema_from`
+   --> /home/nthuli/.cargo/registry/src/index.crates.io-6f17d22bba15001f/utoipa-4.2.3/src/openapi/schema.rs:138:31
+    |
+138 |     pub fn schema_from<'s, I: ToSchema<'s>>(mut self) -> Self {
+    |                               ^^^^^^^^^^^^ required by this bound in `ComponentsBuilder::schema_from`
+
+error[E0277]: the trait bound `LogEntry: ToSchema<'_>` is not satisfied
+   --> src/api/mod.rs:164:13
+    |
+164 |             crate::logging::LogEntry,
+    |             -----^^^^^^^^^^^^^^^^^^^
+    |             |
+    |             the trait `ToSchema<'_>` is not implemented for `LogEntry`
+    |             required by a bound introduced by this call
+    |
+    = help: the following other types implement trait `ToSchema<'__s>`:
+              ()
+              AddCategoryRequest
+              AddPasswordRequest
+              BackupListResponse
+              BongaSmsResponse
+              CategoryEntry
+              CategoryListResponse
+              ChangePasswordRequest
+            and 51 others
+note: required by a bound in `ComponentsBuilder::schema_from`
+   --> /home/nthuli/.cargo/registry/src/index.crates.io-6f17d22bba15001f/utoipa-4.2.3/src/openapi/schema.rs:138:31
+    |
+138 |     pub fn schema_from<'s, I: ToSchema<'s>>(mut self) -> Self {
+    |                               ^^^^^^^^^^^^ required by this bound in `ComponentsBuilder::schema_from`
+
+error[E0277]: the trait bound `LogLevel: ToSchema<'_>` is not satisfied
+   --> src/api/mod.rs:165:13
+    |
+165 |             crate::logging::LogLevel,
+    |             -----^^^^^^^^^^^^^^^^^^^
+    |             |
+    |             the trait `ToSchema<'_>` is not implemented for `LogLevel`
+    |             required by a bound introduced by this call
+    |
+    = help: the following other types implement trait `ToSchema<'__s>`:
+              ()
+              AddCategoryRequest
+              AddPasswordRequest
+              BackupListResponse
+              BongaSmsResponse
+              CategoryEntry
+              CategoryListResponse
+              ChangePasswordRequest
+            and 51 others
+note: required by a bound in `ComponentsBuilder::schema_from`
+   --> /home/nthuli/.cargo/registry/src/index.crates.io-6f17d22bba15001f/utoipa-4.2.3/src/openapi/schema.rs:138:31
+    |
+138 |     pub fn schema_from<'s, I: ToSchema<'s>>(mut self) -> Self {
+    |                               ^^^^^^^^^^^^ required by this bound in `ComponentsBuilder::schema_from`
+
+error[E0277]: the trait bound `LogFilter: ToSchema<'_>` is not satisfied
+   --> src/api/mod.rs:166:13
+    |
+166 |             crate::logging::LogFilter
+    |             -----^^^^^^^^^^^^^^^^^^^^
+    |             |
+    |             the trait `ToSchema<'_>` is not implemented for `LogFilter`
+    |             required by a bound introduced by this call
+    |
+    = help: the following other types implement trait `ToSchema<'__s>`:
+              ()
+              AddCategoryRequest
+              AddPasswordRequest
+              BackupListResponse
+              BongaSmsResponse
+              CategoryEntry
+              CategoryListResponse
+              ChangePasswordRequest
+            and 51 others
+note: required by a bound in `ComponentsBuilder::schema_from`
+   --> /home/nthuli/.cargo/registry/src/index.crates.io-6f17d22bba15001f/utoipa-4.2.3/src/openapi/schema.rs:138:31
+    |
+138 |     pub fn schema_from<'s, I: ToSchema<'s>>(mut self) -> Self {
+    |                               ^^^^^^^^^^^^ required by this bound in `ComponentsBuilder::schema_from`
+
+warning: unused import: `utoipa::ToSchema`
+  --> src/api/handlers/categories.rs:14:5
+   |
+14 | use utoipa::ToSchema;
+   |     ^^^^^^^^^^^^^^^^
+
+warning: unused import: `ToSchema`
+  --> src/api/handlers/backups.rs:15:20
+   |
+15 | use utoipa::{path, ToSchema};
+   |                    ^^^^^^^^
+
+warning: unused import: `Write`
+ --> src/system/firejail.rs:4:21
+  |
+4 | use std::io::{self, Write};
+  |                     ^^^^^
+
+warning: unused variable: `info`
+  --> src/importers/chrome.rs:71:48
+   |
+71 | ...                   for (name, info) in profile_map {
+   |                                  ^^^^ help: if this is intentional, prefix it with an underscore: `_info`
+
+warning: unused variable: `encrypted_data`
+   --> src/importers/chrome.rs:207:14
+    |
+207 |         let (encrypted_data, is_v10) = if &encrypted[0..5] == dpapi_prefix {
+    |              ^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_encrypted_data`
+
+warning: unused variable: `is_v10`
+   --> src/importers/chrome.rs:207:30
+    |
+207 |         let (encrypted_data, is_v10) = if &encrypted[0..5] == dpapi_prefix {
+    |                              ^^^^^^ help: if this is intentional, prefix it with an underscore: `_is_v10`
+
+warning: unused variable: `key`
+   --> src/importers/chrome.rs:296:13
+    |
+296 |         let key = output.stdout;
+    |             ^^^ help: if this is intentional, prefix it with an underscore: `_key`
+
+warning: unused variable: `key`
+   --> src/importers/chrome.rs:319:13
+    |
+319 |         let key = b"peanuts";
+    |             ^^^ help: if this is intentional, prefix it with an underscore: `_key`
+
+warning: unused variable: `info`
+  --> src/importers/edge.rs:71:48
+   |
+71 | ...                   for (name, info) in profile_map {
+   |                                  ^^^^ help: if this is intentional, prefix it with an underscore: `_info`
+
+warning: unused variable: `encrypted_data`
+   --> src/importers/edge.rs:208:14
+    |
+208 |         let (encrypted_data, is_v10) = if &encrypted[0..5] == dpapi_prefix {
+    |              ^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_encrypted_data`
+
+warning: unused variable: `is_v10`
+   --> src/importers/edge.rs:208:30
+    |
+208 |         let (encrypted_data, is_v10) = if &encrypted[0..5] == dpapi_prefix {
+    |                              ^^^^^^ help: if this is intentional, prefix it with an underscore: `_is_v10`
+
+warning: unused variable: `key`
+   --> src/importers/edge.rs:330:13
+    |
+330 |         let key = b"peanuts";
+    |             ^^^ help: if this is intentional, prefix it with an underscore: `_key`
+
+For more information about this error, try `rustc --explain E0277`.
