@@ -555,40 +555,73 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-# Database
-sqlx = { version = "0.7", features = ["postgres", "runtime-tokio-rustls", "uuid", "chrono", "json"] }
+# Async and runtime
 tokio = { version = "1", features = ["full"] }
+futures = "0.3"
+lazy_static = "1.4"
 
-# Encryption
+# Web framework
+actix-web = "4"
+actix-cors = "0.6"
+actix-multipart = "0.6"
+
+# Utilities
+tempfile = "3.8"
+urlencoding = "2.1"
+reqwest = { version = "0.12", features = ["json", "blocking", "multipart"] }
+
+# Crypto and security
 argon2 = "0.5"
 aes-gcm = "0.10"
+sha2 = "0.10"
 rand = "0.8"
+rand_core = "0.6"
+rand_chacha = "0.3"
 base64 = "0.21"
+chacha20poly1305 = "0.10.1"
+jsonwebtoken = "9.2.0"
+hex = "0.4"
+rustix = { version = "0.38", features = ["fs"] }
 
-# TUI
+# CLI + User interaction
 inquire = "0.6"
 console = "0.15"
+clap = { version = "4", features = ["derive", "env"] }
+
+# Serialization
+serde = { version = "1", features = ["derive"] }
+serde_json = "1.0"
+
+# Database
+sqlx = { version = "0.7", features = ["postgres", "sqlite", "runtime-tokio-rustls", "uuid", "chrono", "json"] }
+uuid = { version = "1.4", features = ["v4", "serde"] }
+chrono = { version = "0.4", features = ["serde"] }
+rusqlite = { version = "0.29", features = ["bundled"] }
 
 # Firefox integration
 libloading = "0.8"
 ini = "1.3"
-rusqlite = { version = "0.29", features = ["bundled"] }
-serde_json = "1.0"
 
-# Utilities
-uuid = { version = "1.4", features = ["v4", "serde"] }
-chrono = { version = "0.4", features = ["serde"] }
+# System and OS
+libc = "0.2"
+directories = "4.0"
+dirs = "5.0"
+sysinfo = "0.28.0"
+ctrlc = "3.2"
+
+# Logging and error handling
 thiserror = "1.0"
-dotenvy = "0.15"
 log = "0.4"
 env_logger = "0.10"
-dirs = "5.0"
+dotenvy = "0.15"
 
-# Password generation
-rand_chacha = "0.3"
+#swagger and redoc
+utoipa = { version = "4.1", features = ["actix_extras"] }
+utoipa-swagger-ui = { version = "5.0", features = ["actix-web"] }
+utoipa-redoc = { version = "2.0", features = ["actix-web"] }
+winapi = { version = "0.3", features = ["dpapi", "wincrypt"] }
 
-#command line argumeny parser
-clap = { version = "4", features = ["derive"] }
+anyhow = "1"
 ```
 
 ## 🚀 Run the App
