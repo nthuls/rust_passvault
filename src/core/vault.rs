@@ -256,12 +256,17 @@ impl Vault {
         let importer = FirefoxImporter::new();
         
         // Import using the master key, which is never exposed outside the Vault
-        importer.import_passwords(
+        // Add update_existing parameter with default value of false
+        let (added, updated) = importer.import_passwords(
             &self.db,
             profile_path,
             master_password,
             &master_key,  // Pass the master key to the importer
             category,
-        ).await
+            false, // Default to not updating existing passwords
+        ).await?;
+        
+        // Return total count (added + updated)
+        Ok(added + updated)
     }
 }

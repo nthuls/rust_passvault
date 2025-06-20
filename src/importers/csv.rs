@@ -36,11 +36,13 @@ impl CsvImporter {
         delimiter: char,
         has_header: bool,
         category: Option<&str>,
-    ) -> Result<usize, CsvImportError> {
+        update_existing: bool, // Add this parameter
+    ) -> Result<(usize, usize), CsvImportError> { // Return (added, updated) counts
         let file = File::open(path)?;
         let reader = BufReader::new(file);
         
-        let mut count = 0;
+        let mut added_count = 0;
+        let mut updated_count = 0;
         
         for (line_num, line_result) in reader.lines().enumerate() {
             // Skip header line if present
@@ -79,19 +81,22 @@ impl CsvImporter {
             }
             categories.push("CSV Import".to_string());
             
-            // Add to database
-            db.add_password(
+            // Add or update password
+            match db.add_or_update_password(
                 site,
                 username,
                 &encrypted,
                 notes,
                 &categories,
-            ).await?;
-            
-            count += 1;
+                update_existing,
+            ).await {
+                Ok((_, true)) => updated_count += 1,
+                Ok((_, false)) => added_count += 1,
+                Err(e) => return Err(CsvImportError::DbError(e)),
+            }
         }
         
-        Ok(count)
+        Ok((added_count, updated_count))
     }
     
     // Export passwords to CSV

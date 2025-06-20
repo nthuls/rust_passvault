@@ -127,6 +127,15 @@ pub trait DatabaseBackend: Send + Sync {
         username: &str
     ) -> Result<Option<PasswordEntry>, DbError>;
 
+    async fn add_or_update_password(
+        &self, 
+        site: &str, 
+        username: &str, 
+        encrypted_password: &[u8], 
+        notes: Option<&str>, 
+        categories: &[String],
+        update_if_exists: bool
+    ) -> Result<(Uuid, bool), DbError>; // Returns (id, was_updated)
 }
 
 // Enum to hold specific backend implementations
@@ -374,6 +383,25 @@ impl Database {
         match &self.backend {
             DatabaseType::Postgres(backend) => backend.get_password_by_site_and_username(site, username).await,
             DatabaseType::Sqlite(backend) => backend.get_password_by_site_and_username(site, username).await,
+        }
+    }
+
+    pub async fn add_or_update_password(
+        &self,
+        site: &str,
+        username: &str,
+        encrypted_password: &[u8],
+        notes: Option<&str>,
+        categories: &[String],
+        update_if_exists: bool
+    ) -> Result<(Uuid, bool), DbError> {
+        match &self.backend {
+            DatabaseType::Postgres(backend) => backend.add_or_update_password(
+                site, username, encrypted_password, notes, categories, update_if_exists
+            ).await,
+            DatabaseType::Sqlite(backend) => backend.add_or_update_password(
+                site, username, encrypted_password, notes, categories, update_if_exists
+            ).await,
         }
     }
 }

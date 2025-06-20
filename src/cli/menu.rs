@@ -602,9 +602,12 @@ pub async fn run_cli_menu(db: Database, should_exit: Arc<AtomicBool>) -> Result<
                             &db,
                             &master_key,
                             category,
+                            false, // Add this parameter - default to not updating existing passwords
                         ).await {
-                            Ok(count) => {
-                                println!("✅ Successfully imported {} passwords from Firefox!", count);
+                            Ok((added, updated)) => { // Handle tuple return type
+                                let total = added + updated;
+                                println!("✅ Successfully imported {} passwords from Firefox! ({} new, {} updated)", 
+                                         total, added, updated);
                             }
                             Err(e) => {
                                 println!("❌ Failed to import passwords: {}", e);
@@ -683,9 +686,12 @@ pub async fn run_cli_menu(db: Database, should_exit: Arc<AtomicBool>) -> Result<
                             Some(&profile_path.to_string_lossy()),
                             &master_key,
                             category,
+                            Some(false), // Add this parameter - default to not updating existing passwords
                         ).await {
-                            Ok(count) => {
-                                println!("✅ Successfully imported {} passwords from Chrome!", count);
+                            Ok((added, updated)) => { // Handle tuple return type
+                                let total = added + updated;
+                                println!("✅ Successfully imported {} passwords from Chrome! ({} new, {} updated)", 
+                                         total, added, updated);
                             },
                             Err(e) => {
                                 println!("❌ Failed to import passwords: {}", e);
@@ -764,9 +770,12 @@ pub async fn run_cli_menu(db: Database, should_exit: Arc<AtomicBool>) -> Result<
                             Some(&profile_path.to_string_lossy()),
                             &master_key,
                             category,
+                            Some(false), // Add this parameter - default to not updating existing passwords
                         ).await {
-                            Ok(count) => {
-                                println!("✅ Successfully imported {} passwords from Edge!", count);
+                            Ok((added, updated)) => { // Handle tuple return type
+                                let total = added + updated;
+                                println!("✅ Successfully imported {} passwords from Edge! ({} new, {} updated)", 
+                                         total, added, updated);
                             },
                             Err(e) => {
                                 println!("❌ Failed to import passwords: {}", e);
@@ -849,8 +858,7 @@ pub async fn run_cli_menu(db: Database, should_exit: Arc<AtomicBool>) -> Result<
                                 };
                                 
                                 // Get database reference for the importer
-                                let db = vault.get_db_ref();
-                                
+                                let db = vault.get_db_ref(); 
                                 match importer.import(
                                     std::path::Path::new(&file_path),
                                     &db,
@@ -858,9 +866,12 @@ pub async fn run_cli_menu(db: Database, should_exit: Arc<AtomicBool>) -> Result<
                                     delimiter.chars().next().unwrap(),
                                     has_header,
                                     category,
+                                    false, // Add this parameter - default to not updating existing passwords
                                 ).await {
-                                    Ok(count) => {
-                                        println!("✅ Successfully imported {} passwords from CSV!", count);
+                                    Ok((added, updated)) => { // Handle tuple return type
+                                        let total = added + updated;
+                                        println!("✅ Successfully imported {} passwords from CSV! ({} new, {} updated)", 
+                                                 total, added, updated);
                                     }
                                     Err(e) => {
                                         println!("❌ Failed to import passwords: {}", e);

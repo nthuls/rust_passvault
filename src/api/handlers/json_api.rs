@@ -479,13 +479,19 @@ pub async fn handle_json_api(args: Args, db: Database) -> Result<(), Box<dyn Err
                         path.as_deref(),
                         &master_key,
                         category.as_deref(),
+                        Some(false), // Add this parameter - default to not updating
                     ).await {
-                        Ok(count) => {
-                            info!("Successfully imported {} passwords from Chrome", count);
+                        Ok((added, updated)) => {
+                            let total = added + updated;
+                            info!("Successfully imported {} passwords from Chrome ({} new, {} updated)", 
+                                  total, added, updated);
                             let response = json!({
                                 "success": true,
-                                "count": count,
-                                "message": format!("Successfully imported {} passwords from Chrome", count),
+                                "count": total,
+                                "added_count": added,
+                                "updated_count": updated,
+                                "message": format!("Successfully imported {} passwords from Chrome ({} new, {} updated)", 
+                                                  total, added, updated),
                             });
                             println!("{}", response);
                         },
@@ -538,13 +544,19 @@ pub async fn handle_json_api(args: Args, db: Database) -> Result<(), Box<dyn Err
                         path.as_deref(),
                         &master_key,
                         category.as_deref(),
+                        Some(false), // Add this parameter - default to not updating
                     ).await {
-                        Ok(count) => {
-                            info!("Successfully imported {} passwords from Edge", count);
+                        Ok((added, updated)) => {
+                            let total = added + updated;
+                            info!("Successfully imported {} passwords from Edge ({} new, {} updated)", 
+                                  total, added, updated);
                             let response = json!({
                                 "success": true,
-                                "count": count,
-                                "message": format!("Successfully imported {} passwords from Edge", count),
+                                "count": total,
+                                "added_count": added,
+                                "updated_count": updated,
+                                "message": format!("Successfully imported {} passwords from Edge ({} new, {} updated)", 
+                                                  total, added, updated),
                             });
                             println!("{}", response);
                         },

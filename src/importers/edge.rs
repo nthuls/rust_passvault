@@ -338,13 +338,18 @@ impl EdgeImporter {
     }
     
     // Import passwords from Edge to our database
+    // Updated to support checking for existing passwords and optionally updating them
     pub async fn import_passwords(
         &self,
         db: &Database,
         profile_path: Option<&str>,
         vault_key: &[u8],
         category: Option<&str>,
-    ) -> Result<usize, EdgeImportError> {
+        update_existing: Option<bool>, // New parameter to control updating behavior
+    ) -> Result<(usize, usize), EdgeImportError> { // Updated return type to provide (added, updated) counts
+        // Default to not updating if not specified
+        let update_existing = update_existing.unwrap_or(false);
+        
         // Determine which profile to use
         let profile = if let Some(path) = profile_path {
             PathBuf::from(path)
@@ -365,8 +370,9 @@ impl EdgeImporter {
         // Decrypt the credentials
         let decrypted = self.decrypt_credentials(credentials);
         
-        // Import to database
-        let mut count = 0;
+        // Initialize counters for tracking added and updated passwords
+        let mut added_count = 0;
+        let mut updated_count = 0;
         
         // Set up categories
         let mut categories = Vec::new();
@@ -375,23 +381,26 @@ impl EdgeImporter {
         }
         categories.push("Edge Import".to_string());
         
-        // Add each password to the database
+        // Add or update each password in the database
         for (site, username, password) in decrypted {
             // Encrypt the password with our vault key
             let encrypted = crypto::encrypt_password(vault_key, &password)?;
             
-            // Add to database
-            db.add_password(
+            // Add or update in database using the new method
+            match db.add_or_update_password(
                 &site,
                 &username,
                 &encrypted,
                 None,
                 &categories,
-            ).await?;
-            
-            count += 1;
+                update_existing,
+            ).await {
+                Ok((_, true)) => updated_count += 1, // Password was updated
+                Ok((_, false)) => added_count += 1,  // Password was added or skipped (if it exists and update_existing is false)
+                Err(e) => return Err(EdgeImportError::DbError(e)),
+            }
         }
         
-        Ok(count)
+        Ok((added_count, updated_count))
     }
 }

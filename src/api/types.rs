@@ -301,6 +301,8 @@ pub struct ImportFirefoxRequest {
     pub master_password: Option<String>,
     /// Category to assign to imported passwords
     pub category: Option<String>,
+    /// Check if we want to update an exixting passwd
+    pub update_existing: Option<bool>,
 }
 
 #[derive(Serialize, Deserialize, ToSchema)]
@@ -309,6 +311,8 @@ pub struct ImportChromeRequest {
     pub profile_path: Option<String>,
     /// Category to assign to imported passwords
     pub category: Option<String>,
+    /// Check if we want to update an exixting passwd
+    pub update_existing: Option<bool>,
 }
 
 #[derive(Serialize, Deserialize, ToSchema)]
@@ -317,14 +321,20 @@ pub struct ImportEdgeRequest {
     pub profile_path: Option<String>,
     /// Category to assign to imported passwords
     pub category: Option<String>,
+    /// Check if we want to update an exixting passwd
+    pub update_existing: Option<bool>,
 }
 
 #[derive(Serialize, Deserialize, ToSchema)]
 pub struct ImportResponse {
     /// Whether the operation was successful
     pub success: bool,
-    /// Number of passwords imported
+    /// Total number of password entries processed (added + updated)
     pub count: usize,
+    /// Number of new password entries added
+    pub added_count: Option<usize>,
+    /// Number of existing password entries updated
+    pub updated_count: Option<usize>,
     /// Success message
     pub message: Option<String>,
     /// Error message (if operation failed)

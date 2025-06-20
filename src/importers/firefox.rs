@@ -42,7 +42,8 @@ impl FirefoxImporter {
         db: &Database,
         vault_key: &[u8],
         category: Option<&str>,
-    ) -> Result<usize, ImportError> {
+        update_existing: bool, // Add this parameter
+    ) -> Result<(usize, usize), ImportError> { // Return (added, updated) counts
         // Create credential manager
         let manager = FirefoxCredentialManager::new(profile_path);
         
@@ -51,7 +52,8 @@ impl FirefoxImporter {
             .map_err(|e| ImportError::CredentialError(e.to_string()))?;
         
         // Import into our database
-        let mut count = 0;
+        let mut added_count = 0;
+        let mut updated_count = 0;
         
         for cred in credentials {
             // Encrypt the password
@@ -64,19 +66,22 @@ impl FirefoxImporter {
             }
             categories.push("Firefox Import".to_string());
             
-            // Add to database
-            db.add_password(
+            // Add or update password
+            match db.add_or_update_password(
                 &cred.url,
                 &cred.username,
                 &encrypted,
                 None,
                 &categories,
-            ).await?;
-            
-            count += 1;
+                update_existing,
+            ).await {
+                Ok((_, true)) => updated_count += 1,
+                Ok((_, false)) => added_count += 1,
+                Err(e) => return Err(ImportError::DbError(e)),
+            }
         }
         
-        Ok(count)
+        Ok((added_count, updated_count))
     }
     /// Import passwords from Firefox profiles
     pub async fn import_passwords(
@@ -84,9 +89,10 @@ impl FirefoxImporter {
         db: &Database,
         profile_path: Option<&str>,
         master_password: Option<&str>,
-        vault_key: &[u8],  // Added this parameter to accept master key
+        vault_key: &[u8],
         category: Option<&str>,
-    ) -> Result<usize, Box<dyn std::error::Error>> {
+        update_existing: bool, // Add this parameter
+    ) -> Result<(usize, usize), Box<dyn std::error::Error>> {
         // If a specific profile path is provided, use it
         if let Some(path_str) = profile_path {
             let path = std::path::PathBuf::from(path_str);
@@ -94,8 +100,9 @@ impl FirefoxImporter {
                 path,
                 master_password,
                 db,
-                vault_key,  // Pass the vault key instead of an empty vector
+                vault_key,
                 category,
+                update_existing, // Pass this parameter
             ).await.map_err(|e| Box::new(e) as Box<dyn std::error::Error>);
         }
         
@@ -111,8 +118,9 @@ impl FirefoxImporter {
             profile_path.clone(),
             master_password,
             db,
-            vault_key,  // Pass the vault key instead of an empty vector
+            vault_key,
             category,
+            update_existing, // Pass this parameter
         ).await.map_err(|e| Box::new(e) as Box<dyn std::error::Error>)
     }
     

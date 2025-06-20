@@ -970,4 +970,106 @@ impl DatabaseBackend for SqliteBackend {
             .await?;
         Ok(result.get::<i64, _>("count") as usize)
     }
+
+    async fn get_password_by_site_and_username(
+        &self,
+        site: &str,
+        username: &str
+    ) -> Result<Option<PasswordEntry>, DbError> {
+        let pool = self.get_pool()?;
+        
+        // Use query instead of query_as since we need to manually construct the PasswordEntry
+        let row = sqlx::query(
+            "SELECT id, site, username, password, notes, created_at, updated_at
+             FROM passwords
+             WHERE site = ? AND username = ?"
+        )
+        .bind(site)
+        .bind(username)
+        .fetch_optional(pool)
+        .await?;
+        
+        if let Some(row) = row {
+            let id_str: String = row.get("id");
+            let id = Uuid::parse_str(&id_str)
+                .map_err(|e| DbError::SqlxError(format!("Invalid UUID: {}", e)))?;
+                
+            let created_at_str: String = row.get("created_at");
+            let created_at = DateTime::parse_from_rfc3339(&created_at_str)
+                .map_err(|e| DbError::SqlxError(format!("Invalid datetime: {}", e)))?
+                .with_timezone(&Utc);
+            
+            let updated_at_str: String = row.get("updated_at");
+            let updated_at = DateTime::parse_from_rfc3339(&updated_at_str)
+                .map_err(|e| DbError::SqlxError(format!("Invalid datetime: {}", e)))?
+                .with_timezone(&Utc);
+            
+            // Get categories for this password
+            let categories = sqlx::query(
+                "SELECT c.name
+                 FROM categories c
+                 JOIN password_categories pc ON c.id = pc.category_id
+                 WHERE pc.password_id = ?"
+            )
+            .bind(&id_str)
+            .fetch_all(pool)
+            .await?
+            .into_iter()
+            .map(|r| r.get::<String, _>("name"))
+            .collect();
+            
+            let password_entry = PasswordEntry {
+                id,
+                site: row.get("site"),
+                username: row.get("username"),
+                password: row.get("password"),
+                notes: row.get("notes"),
+                created_at,
+                updated_at,
+                categories,
+            };
+            
+            Ok(Some(password_entry))
+        } else {
+            Ok(None)
+        }
+    }
+
+    async fn add_or_update_password(
+        &self, 
+        site: &str, 
+        username: &str, 
+        encrypted_password: &[u8], 
+        notes: Option<&str>, 
+        categories: &[String],
+        update_if_exists: bool
+    ) -> Result<(Uuid, bool), DbError> {
+        // Check if the password already exists
+        let existing_password = self.get_password_by_site_and_username(site, username).await?;
+        
+        match existing_password {
+            Some(existing) if update_if_exists => {
+                // Update the existing password
+                self.update_password(
+                    existing.id,
+                    Some(site),
+                    Some(username),
+                    Some(encrypted_password),
+                    notes,
+                    Some(categories),
+                ).await?;
+                
+                Ok((existing.id, true)) // Password was updated
+            },
+            Some(existing) => {
+                // Password exists but we're not updating
+                Ok((existing.id, false)) // Password was not updated (skipped)
+            },
+            None => {
+                // Add new password
+                let id = self.add_password(site, username, encrypted_password, notes, categories).await?;
+                Ok((id, false)) // New password was added
+            }
+        }
+    }
 }

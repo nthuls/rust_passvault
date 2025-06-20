@@ -57,18 +57,17 @@ impl ChromeImporter {
     // Find Chrome profiles on the system
     pub fn list_profiles(&self) -> Vec<(String, PathBuf)> {
         let mut profiles = Vec::new();
-        
         let default_path = self.get_default_profile_path();
+
         if let Some(dir) = default_path {
             if dir.exists() {
-                // Try to read Local State file to get profile info
                 let local_state_path = dir.join("Local State");
                 if local_state_path.exists() {
                     if let Ok(content) = fs::read_to_string(local_state_path) {
                         if let Ok(json) = serde_json::from_str::<serde_json::Value>(&content) {
                             if let Some(profile_obj) = json.get("profile").and_then(|p| p.get("info_cache")) {
                                 if let Some(profile_map) = profile_obj.as_object() {
-                                    for (name, info) in profile_map {
+                                    for (name, _) in profile_map {
                                         let profile_path = dir.join(name);
                                         if profile_path.exists() {
                                             profiles.push((name.clone(), profile_path));
@@ -79,8 +78,7 @@ impl ChromeImporter {
                         }
                     }
                 }
-                
-                // If we couldn't get profiles from Local State, at least add Default
+
                 if profiles.is_empty() {
                     let default_profile = dir.join("Default");
                     if default_profile.exists() {
@@ -89,7 +87,7 @@ impl ChromeImporter {
                 }
             }
         }
-        
+
         profiles
     }
     
@@ -327,13 +325,18 @@ impl ChromeImporter {
     }
     
     // Import passwords from Chrome to our database
+    // Updated to support checking for existing passwords and optionally updating them
     pub async fn import_passwords(
         &self,
         db: &Database,
         profile_path: Option<&str>,
         vault_key: &[u8],
         category: Option<&str>,
-    ) -> Result<usize, ChromeImportError> {
+        update_existing: Option<bool>, // New parameter to control updating behavior
+    ) -> Result<(usize, usize), ChromeImportError> { // Updated return type to provide (added, updated) counts
+        // Default to not updating if not specified
+        let update_existing = update_existing.unwrap_or(false);
+        
         // Determine which profile to use
         let profile = if let Some(path) = profile_path {
             PathBuf::from(path)
@@ -355,7 +358,8 @@ impl ChromeImporter {
         let decrypted = self.decrypt_credentials(credentials);
         
         // Import to database
-        let mut count = 0;
+        let mut added_count = 0;
+        let mut updated_count = 0;
         
         // Set up categories
         let mut categories = Vec::new();
@@ -364,23 +368,26 @@ impl ChromeImporter {
         }
         categories.push("Chrome Import".to_string());
         
-        // Add each password to the database
+        // Add or update each password in the database
         for (site, username, password) in decrypted {
             // Encrypt the password with our vault key
             let encrypted = crypto::encrypt_password(vault_key, &password)?;
             
-            // Add to database
-            db.add_password(
+            // Add or update in database using the new method
+            match db.add_or_update_password(
                 &site,
                 &username,
                 &encrypted,
                 None,
                 &categories,
-            ).await?;
-            
-            count += 1;
+                update_existing,
+            ).await {
+                Ok((_, true)) => updated_count += 1, // Password was updated
+                Ok((_, false)) => added_count += 1,  // Password was added or skipped (because it exists and update_existing is false)
+                Err(e) => return Err(ChromeImportError::DbError(e)),
+            }
         }
         
-        Ok(count)
+        Ok((added_count, updated_count))
     }
 }

@@ -16,7 +16,7 @@ use crate::api::types::{
     ImportResponse
 };
 use crate::api::utils::{extract_token, extract_master_key};
-use log::{info, error};
+use log::{info, error, debug};
 use std::collections::HashMap;
 use crate::importers::ChromeImporter;
 use crate::importers::EdgeImporter;
@@ -114,6 +114,8 @@ pub async fn import_firefox(
             return HttpResponse::Unauthorized().json(ImportResponse {
                 success: false,
                 count: 0,
+                added_count: Some(0),
+                updated_count: Some(0),
                 message: None,
                 error: Some(format!("Authentication error: {}", e)),
             });
@@ -128,6 +130,8 @@ pub async fn import_firefox(
             return HttpResponse::InternalServerError().json(ImportResponse {
                 success: false,
                 count: 0,
+                added_count: Some(0),
+                updated_count: Some(0),
                 message: None,
                 error: Some(format!("Failed to get master key: {}", e)),
             });
@@ -148,6 +152,8 @@ pub async fn import_firefox(
                 return HttpResponse::BadRequest().json(ImportResponse {
                     success: false,
                     count: 0,
+                    added_count: Some(0),
+                    updated_count: Some(0),
                     message: None,
                     error: Some("No Firefox profiles found".to_string()),
                 });
@@ -163,6 +169,8 @@ pub async fn import_firefox(
         return HttpResponse::BadRequest().json(ImportResponse {
             success: false,
             count: 0,
+            added_count: Some(0),
+            updated_count: Some(0),
             message: None,
             error: Some(format!("Profile path not found: {}", profile_path.display())),
         });
@@ -171,6 +179,9 @@ pub async fn import_firefox(
     // Get database reference
     let db = vault.get_db_ref();
     
+    // Determine if we should update existing passwords
+    let update_existing = import_req.update_existing.unwrap_or(false);
+    
     // Import the credentials
     match importer.import_credentials(
         profile_path.clone(),
@@ -178,13 +189,20 @@ pub async fn import_firefox(
         &db,
         &master_key,
         import_req.category.as_deref(),
+        update_existing,
     ).await {
-        Ok(count) => {
-            info!("Successfully imported {} passwords from Firefox", count);
+        Ok((added, updated)) => {
+            let total = added + updated;
+            info!("Successfully imported {} passwords from Firefox ({} new, {} updated)", 
+                 total, added, updated);
+            
             HttpResponse::Ok().json(ImportResponse {
                 success: true,
-                count,
-                message: Some(format!("Successfully imported {} passwords from Firefox", count)),
+                count: total,
+                added_count: Some(added),
+                updated_count: Some(updated),
+                message: Some(format!("Successfully imported {} passwords from Firefox ({} new, {} updated)",
+                                    total, added, updated)),
                 error: None,
             })
         },
@@ -193,6 +211,8 @@ pub async fn import_firefox(
             HttpResponse::InternalServerError().json(ImportResponse {
                 success: false,
                 count: 0,
+                added_count: Some(0),
+                updated_count: Some(0),
                 message: None,
                 error: Some(format!("Failed to import Firefox credentials: {}", e)),
             })
@@ -230,6 +250,8 @@ pub async fn import_chrome(
             return HttpResponse::Unauthorized().json(ImportResponse {
                 success: false,
                 count: 0,
+                added_count: Some(0),
+                updated_count: Some(0),
                 message: None,
                 error: Some(format!("Authentication error: {}", e)),
             });
@@ -244,6 +266,8 @@ pub async fn import_chrome(
             return HttpResponse::InternalServerError().json(ImportResponse {
                 success: false,
                 count: 0,
+                added_count: Some(0),
+                updated_count: Some(0),
                 message: None,
                 error: Some(format!("Failed to get master key: {}", e)),
             });
@@ -256,19 +280,29 @@ pub async fn import_chrome(
     // Get database reference
     let db = vault.get_db_ref();
     
+    // Determine if we should update existing passwords
+    let update_existing = import_req.update_existing.unwrap_or(false);
+    
     // Import the credentials
     match importer.import_passwords(
         &db,
         import_req.profile_path.as_deref(),
         &master_key,
         import_req.category.as_deref(),
+        Some(update_existing), // Convert bool to Option<bool>
     ).await {
-        Ok(count) => {
-            info!("Successfully imported {} passwords from Chrome", count);
+        Ok((added, updated)) => {
+            let total = added + updated;
+            info!("Successfully imported {} passwords from Chrome ({} new, {} updated)", 
+                 total, added, updated);
+                 
             HttpResponse::Ok().json(ImportResponse {
                 success: true,
-                count,
-                message: Some(format!("Successfully imported {} passwords from Chrome", count)),
+                count: total,
+                added_count: Some(added),
+                updated_count: Some(updated),
+                message: Some(format!("Successfully imported {} passwords from Chrome ({} new, {} updated)",
+                                     total, added, updated)),
                 error: None,
             })
         },
@@ -277,6 +311,8 @@ pub async fn import_chrome(
             HttpResponse::InternalServerError().json(ImportResponse {
                 success: false,
                 count: 0,
+                added_count: Some(0),
+                updated_count: Some(0),
                 message: None,
                 error: Some(format!("Failed to import Chrome credentials: {}", e)),
             })
@@ -314,6 +350,8 @@ pub async fn import_edge(
             return HttpResponse::Unauthorized().json(ImportResponse {
                 success: false,
                 count: 0,
+                added_count: Some(0),
+                updated_count: Some(0),
                 message: None,
                 error: Some(format!("Authentication error: {}", e)),
             });
@@ -328,6 +366,8 @@ pub async fn import_edge(
             return HttpResponse::InternalServerError().json(ImportResponse {
                 success: false,
                 count: 0,
+                added_count: Some(0),
+                updated_count: Some(0),
                 message: None,
                 error: Some(format!("Failed to get master key: {}", e)),
             });
@@ -340,19 +380,29 @@ pub async fn import_edge(
     // Get database reference
     let db = vault.get_db_ref();
     
+    // Determine if we should update existing passwords
+    let update_existing = import_req.update_existing.unwrap_or(false);
+    
     // Import the credentials
     match importer.import_passwords(
         &db,
         import_req.profile_path.as_deref(),
         &master_key,
         import_req.category.as_deref(),
+        Some(update_existing), // Convert bool to Option<bool>
     ).await {
-        Ok(count) => {
-            info!("Successfully imported {} passwords from Edge", count);
+        Ok((added, updated)) => {
+            let total = added + updated;
+            info!("Successfully imported {} passwords from Edge ({} new, {} updated)", 
+                 total, added, updated);
+                 
             HttpResponse::Ok().json(ImportResponse {
                 success: true,
-                count,
-                message: Some(format!("Successfully imported {} passwords from Edge", count)),
+                count: total,
+                added_count: Some(added),
+                updated_count: Some(updated),
+                message: Some(format!("Successfully imported {} passwords from Edge ({} new, {} updated)",
+                                     total, added, updated)),
                 error: None,
             })
         },
@@ -361,12 +411,15 @@ pub async fn import_edge(
             HttpResponse::InternalServerError().json(ImportResponse {
                 success: false,
                 count: 0,
+                added_count: Some(0),
+                updated_count: Some(0),
                 message: None,
                 error: Some(format!("Failed to import Edge credentials: {}", e)),
             })
         }
     }
 }
+
 /// Import passwords from CSV
 ///
 /// Imports passwords from a CSV file.
@@ -400,6 +453,8 @@ pub async fn import_csv(
             return HttpResponse::Unauthorized().json(ImportResponse {
                 success: false,
                 count: 0,
+                added_count: Some(0),
+                updated_count: Some(0),
                 message: None,
                 error: Some(format!("Authentication error: {}", e)),
             });
@@ -414,6 +469,8 @@ pub async fn import_csv(
             return HttpResponse::InternalServerError().json(ImportResponse {
                 success: false,
                 count: 0,
+                added_count: Some(0),
+                updated_count: Some(0),
                 message: None,
                 error: Some(format!("Failed to get master key: {}", e)),
             });
@@ -428,6 +485,8 @@ pub async fn import_csv(
             return HttpResponse::InternalServerError().json(ImportResponse {
                 success: false,
                 count: 0,
+                added_count: Some(0),
+                updated_count: Some(0),
                 message: None,
                 error: Some(format!("Failed to create temporary file: {}", e)),
             });
@@ -438,6 +497,7 @@ pub async fn import_csv(
     let mut delimiter = ',';
     let mut has_header = true;
     let mut category: Option<String> = None;
+    let mut update_existing = false;
     
     // Process the multipart form
     while let Ok(Some(mut field)) = payload.try_next().await {
@@ -458,6 +518,8 @@ pub async fn import_csv(
                             return HttpResponse::InternalServerError().json(ImportResponse {
                                 success: false,
                                 count: 0,
+                                added_count: Some(0),
+                                updated_count: Some(0),
                                 message: None,
                                 error: Some(format!("Failed to read file chunk: {}", e)),
                             });
@@ -468,6 +530,8 @@ pub async fn import_csv(
                         return HttpResponse::InternalServerError().json(ImportResponse {
                             success: false,
                             count: 0,
+                            added_count: Some(0),
+                            updated_count: Some(0),
                             message: None,
                             error: Some(format!("Failed to write to temporary file: {}", e)),
                         });
@@ -505,6 +569,15 @@ pub async fn import_csv(
                     category = Some(cat_str.to_string());
                 }
             },
+            "update_existing" => {
+                // Get the update_existing flag
+                let mut data = Vec::new();
+                while let Some(chunk) = field.next().await {
+                    data.extend_from_slice(&chunk.unwrap_or_default());
+                }
+                let update_str = String::from_utf8_lossy(&data);
+                update_existing = update_str.trim() == "true";
+            },
             _ => {
                 // Ignore unknown fields
             }
@@ -525,13 +598,20 @@ pub async fn import_csv(
         delimiter,
         has_header,
         category.as_deref(),
+        update_existing,
     ).await {
-        Ok(count) => {
-            info!("Successfully imported {} passwords from CSV", count);
+        Ok((added, updated)) => {
+            let total = added + updated;
+            info!("Successfully imported {} passwords from CSV ({} new, {} updated)", 
+                 total, added, updated);
+                 
             HttpResponse::Ok().json(ImportResponse {
                 success: true,
-                count,
-                message: Some(format!("Successfully imported {} passwords from CSV", count)),
+                count: total,
+                added_count: Some(added),
+                updated_count: Some(updated),
+                message: Some(format!("Successfully imported {} passwords from CSV ({} new, {} updated)",
+                                     total, added, updated)),
                 error: None,
             })
         },
@@ -540,6 +620,8 @@ pub async fn import_csv(
             HttpResponse::InternalServerError().json(ImportResponse {
                 success: false,
                 count: 0,
+                added_count: Some(0),
+                updated_count: Some(0),
                 message: None,
                 error: Some(format!("Failed to import CSV: {}", e)),
             })
@@ -558,6 +640,9 @@ pub async fn import_csv(
         content = ImportVaultRequest,
         content_type = "multipart/form-data"
     ),
+    security(
+        ("bearer_auth" = [])
+    ),
     responses(
         (status = 200, description = "Passwords imported successfully", body = ImportResponse),
         (status = 500, description = "Server error", body = ImportResponse)
@@ -575,6 +660,8 @@ pub async fn import_vault(
             return HttpResponse::Unauthorized().json(ImportResponse {
                 success: false,
                 count: 0,
+                added_count: Some(0),
+                updated_count: Some(0),
                 message: None,
                 error: Some(format!("Authentication error: {}", e)),
             });
@@ -589,6 +676,8 @@ pub async fn import_vault(
             return HttpResponse::InternalServerError().json(ImportResponse {
                 success: false,
                 count: 0,
+                added_count: Some(0),
+                updated_count: Some(0),
                 message: None,
                 error: Some(format!("Failed to get master key: {}", e)),
             });
@@ -601,6 +690,7 @@ pub async fn import_vault(
     // Variables to store file content and password
     let mut file_data: Option<Vec<u8>> = None;
     let mut import_password: Option<String> = None;
+    let mut update_existing = false;
     
     // Process multipart form
     while let Ok(Some(mut field)) = payload.try_next().await {
@@ -622,6 +712,8 @@ pub async fn import_vault(
                             return HttpResponse::BadRequest().json(ImportResponse {
                                 success: false,
                                 count: 0,
+                                added_count: Some(0),
+                                updated_count: Some(0),
                                 message: None,
                                 error: Some("Failed to read uploaded file".to_string()),
                             });
@@ -642,6 +734,8 @@ pub async fn import_vault(
                             return HttpResponse::BadRequest().json(ImportResponse {
                                 success: false,
                                 count: 0,
+                                added_count: Some(0),
+                                updated_count: Some(0),
                                 message: None,
                                 error: Some("Failed to read password field".to_string()),
                             });
@@ -652,6 +746,15 @@ pub async fn import_vault(
                 if !password.is_empty() {
                     import_password = Some(password);
                 }
+            },
+            "update_existing" => {
+                // Get the update_existing flag
+                let mut data = Vec::new();
+                while let Some(chunk) = field.next().await {
+                    data.extend_from_slice(&chunk.unwrap_or_default());
+                }
+                let update_str = String::from_utf8_lossy(&data);
+                update_existing = update_str.trim() == "true";
             },
             _ => {
                 // Ignore unknown fields
@@ -666,6 +769,8 @@ pub async fn import_vault(
             return HttpResponse::BadRequest().json(ImportResponse {
                 success: false,
                 count: 0,
+                added_count: Some(0),
+                updated_count: Some(0),
                 message: None,
                 error: Some("No file uploaded".to_string()),
             });
@@ -683,6 +788,8 @@ pub async fn import_vault(
                 return HttpResponse::InternalServerError().json(ImportResponse {
                     success: false,
                     count: 0,
+                    added_count: Some(0),
+                    updated_count: Some(0),
                     message: None,
                     error: Some(format!("Failed to derive decryption key: {}", e)),
                 });
@@ -701,6 +808,8 @@ pub async fn import_vault(
             return HttpResponse::BadRequest().json(ImportResponse {
                 success: false,
                 count: 0,
+                added_count: Some(0),
+                updated_count: Some(0),
                 message: None,
                 error: Some("Failed to decrypt file. Incorrect password or corrupted file.".to_string()),
             });
@@ -715,6 +824,8 @@ pub async fn import_vault(
             return HttpResponse::BadRequest().json(ImportResponse {
                 success: false,
                 count: 0,
+                added_count: Some(0),
+                updated_count: Some(0),
                 message: None,
                 error: Some("Invalid vault file format".to_string()),
             });
@@ -729,6 +840,8 @@ pub async fn import_vault(
             return HttpResponse::InternalServerError().json(ImportResponse {
                 success: false,
                 count: 0,
+                added_count: Some(0),
+                updated_count: Some(0),
                 message: None,
                 error: Some(format!("Database error: {}", e)),
             });
@@ -744,6 +857,8 @@ pub async fn import_vault(
             return HttpResponse::BadRequest().json(ImportResponse {
                 success: false,
                 count: 0,
+                added_count: Some(0),
+                updated_count: Some(0),
                 message: None,
                 error: Some("Invalid vault file: categories not found".to_string()),
             });
@@ -777,6 +892,8 @@ pub async fn import_vault(
             return HttpResponse::BadRequest().json(ImportResponse {
                 success: false,
                 count: 0,
+                added_count: Some(0),
+                updated_count: Some(0),
                 message: None,
                 error: Some("Invalid vault file: passwords not found".to_string()),
             });
@@ -784,7 +901,8 @@ pub async fn import_vault(
     };
     
     // Track how many passwords were imported
-    let mut imported_count = 0;
+    let mut added_count = 0;
+    let mut updated_count = 0;
     
     // Process each password
     for password_data in passwords {
@@ -805,65 +923,87 @@ pub async fn import_vault(
             // Skip passwords without password value (they were likely exported with include_passwords=false)
             continue;
         }
-        
         // Notes are optional
-        let notes = password_data["notes"].as_str();
-        
-        // Get categories for this password
-        let password_categories = match password_data["categories"].as_array() {
-            Some(cats) => {
-                cats.iter()
-                    .filter_map(|c| c.as_str())
-                    .map(|s| s.to_string())
-                    .collect::<Vec<String>>()
-            },
-            None => Vec::new(),
-        };
-        
-        // Encrypt the password if present
-        let encrypted_password = if let Some(pwd) = password {
-            match crypto::encrypt_password(&master_key, pwd) {
-                Ok(enc) => enc,
-                Err(e) => {
-                    error!("Failed to encrypt password: {}", e);
-                    continue; // Skip this password
-                }
-            }
-        } else {
-            // Generate a placeholder if password not included
-            let placeholder = "[PASSWORD NOT INCLUDED IN EXPORT]";
-            match crypto::encrypt_password(&master_key, placeholder) {
-                Ok(enc) => enc,
-                Err(e) => {
-                    error!("Failed to encrypt placeholder: {}", e);
-                    continue; // Skip this password
-                }
-            }
-        };
-        
-        // Add the password to the database
-        match db.add_password(
-            site,
-            username,
-            &encrypted_password,
-            notes,
-            &password_categories,
-        ).await {
-            Ok(_) => {
-                imported_count += 1;
-            },
-            Err(e) => {
-                error!("Failed to import password for {}: {}", site, e);
-                // Continue with other passwords
-            }
-        }
-    }
-    
-    // Return success response
-    HttpResponse::Ok().json(ImportResponse {
-        success: true,
-        count: imported_count,
-        message: Some(format!("Successfully imported {} passwords", imported_count)),
-        error: None,
-    })
+       let notes = password_data["notes"].as_str();
+       
+       // Get categories for this password
+       let password_categories = match password_data["categories"].as_array() {
+           Some(cats) => {
+               cats.iter()
+                   .filter_map(|c| c.as_str())
+                   .map(|s| s.to_string())
+                   .collect::<Vec<String>>()
+           },
+           None => Vec::new(),
+       };
+       
+       // Encrypt the password if present
+       let encrypted_password = if let Some(pwd) = password {
+           match crypto::encrypt_password(&master_key, pwd) {
+               Ok(enc) => enc,
+               Err(e) => {
+                   error!("Failed to encrypt password: {}", e);
+                   continue; // Skip this password
+               }
+           }
+       } else {
+           // Generate a placeholder if password not included
+           let placeholder = "[PASSWORD NOT INCLUDED IN EXPORT]";
+           match crypto::encrypt_password(&master_key, placeholder) {
+               Ok(enc) => enc,
+               Err(e) => {
+                   error!("Failed to encrypt placeholder: {}", e);
+                   continue; // Skip this password
+               }
+           }
+       };
+       
+       // Add or update the password in the database
+       match db.add_or_update_password(
+           site,
+           username,
+           &encrypted_password,
+           notes,
+           &password_categories,
+           update_existing,
+       ).await {
+           Ok((_, true)) => {
+               updated_count += 1;
+           },
+           Ok((_, false)) => {
+               added_count += 1;
+           },
+           Err(e) => {
+               error!("Failed to import password for {}: {}", site, e);
+               // Continue with other passwords
+           }
+       }
+   }
+   
+   // Commit the transaction
+   if let Err(e) = db.commit_transaction(tx).await {
+       error!("Failed to commit transaction: {}", e);
+       return HttpResponse::InternalServerError().json(ImportResponse {
+           success: false,
+           count: 0,
+           added_count: Some(0),
+           updated_count: Some(0),
+           message: None,
+           error: Some(format!("Failed to commit transaction: {}", e)),
+       });
+   }
+   
+   // Return success response
+   let total = added_count + updated_count;
+   HttpResponse::Ok().json(ImportResponse {
+       success: true,
+       count: total,
+       added_count: Some(added_count),
+       updated_count: Some(updated_count),
+       message: Some(format!(
+           "Successfully imported {} passwords ({} new, {} updated)",
+           total, added_count, updated_count
+       )),
+       error: None,
+   })
 }

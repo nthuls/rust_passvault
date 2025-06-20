@@ -1,4 +1,4 @@
-// src/api/middleware/auth.rs - Fixed for proper token handling
+// src/api/middleware/auth.rs
 
 use actix_web::{
     dev::{forward_ready, Service, ServiceRequest, ServiceResponse, Transform},
